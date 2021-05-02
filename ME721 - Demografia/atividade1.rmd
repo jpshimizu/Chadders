@@ -11,9 +11,10 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-```{r}
+```{r, Leitura e definição dos dados}
 path_df_idade = 'A171441189_28_143_208.csv'
 df_idade = read.csv(path_df_idade,sep=';', skip=3, nrows=33, header=T)
+colnames(df_idade)[1] <- 'Faixa.Etária.detalhada'
 
 df_idade = as_tibble(df_idade) %>% select(-Total)
 
@@ -58,7 +59,7 @@ df$sexo = as.factor(df$sexo)
 df$n_pessoas = as.numeric(df$n_pessoas)
 ```
 
-```{r}
+```{r, Leitura e definição dos dados}
 path_df_idade10 = 'Ceara2010.csv'
 df_idade10 = read.csv(path_df_idade10,sep=';', skip=3, nrows=33, header=T)
 colnames(df_idade10)[1] <- 'Faixa.Etária.detalhada'
@@ -94,6 +95,7 @@ df10$sexo = as.factor(df10$sexo)
 df10$n_pessoas = as.numeric(df10$n_pessoas)
 ```
 
+# Exercício 1
 ```{r}
 df %>% ggplot(
     aes(x = Faixa.Etária.detalhada,
@@ -119,7 +121,7 @@ df %>% ggplot(
       subtitle = "Edad en grupos quinquenales")
 ```
 
-#Exercício 2
+# Exercício 2
 ```{r}
 df2 <- df_idade %>% mutate(rate = -as.integer(Masculino)/as.integer(Feminino))
 df102 <- df_idade10 %>% mutate(rate = as.integer(Masculino)/as.integer(Feminino))
@@ -129,11 +131,126 @@ r$ano <-as.factor(c(rep(1980, 33), rep(2010,33)))
 r$Faixa.Etária.detalhada <- ordered(r$Faixa.Etária.detalhada, levels = c(r$Faixa.Etária.detalhada[1:33]))
 
 r %>% ggplot(aes(x = Faixa.Etária.detalhada, y = rate, fill = ano)) + 
-  geom_bar(data = subset(r, ano == "1980"), stat = "identity", fill = 'darkred', alpha = .6) + 
-  geom_bar(data = subset(r, ano == "2010"), stat = "identity", fill = 'midnightblue', alpha = .6) +  
+  geom_bar(data = subset(r, ano == "1980"), stat = "identity",  alpha = .6) + 
+  geom_bar(data = subset(r, ano == "2010"), stat = "identity",  alpha = .6) +  
+  scale_fill_manual(values = c("midnightblue", "darkred")) +
   theme_minimal() +
   labs(y = "Razão", x = "Faixa Etária", title = "Razão Masculino/Feminino Ceará 1980/2010") +
   theme(legend.position = "bottom", plot.caption = element_text(hjust = 0)) +
   coord_flip()
 ```
 
+# Exercício 3
+Primeiramente, calculando a taxa de crescimento geometrica entre os anos 1980 e 2010 no Ceara
+
+```{r}
+#Lendo os dados
+
+Ceara1980 = read.csv("A171441189_28_143_208.csv", sep=';', skip=4, nrows=33, header=F)
+
+Ceara2010 = read.csv("Ceara2010.csv", sep=';', skip=4, nrows=33, header=F)
+```
+
+```{r}
+#Colocando nomes apropriados para as colunas
+
+colnames(Ceara1980)=c('Idade','Masculino','Feminino','Total') 
+
+colnames(Ceara2010)=c('Idade','Masculino','Feminino','Total') 
+```
+
+```{r}
+#Calculando a populacao total do Ceara em 1980 e em 2010
+
+pop1980 = sum(Ceara1980$Total)
+
+pop2010 = sum(Ceara2010$Total)
+```
+
+
+```{r}
+#Formula para Taxa de Crescimento Geometrica: (raiz(n)(Pt/P0)-1)*100 onde n = 30 (Diferenca entre os anos 1980 e 2010)
+
+Taxa_Crescimento_Geometrica = (((pop2010/pop1980)^(1/30))-1)*100
+
+Taxa_Crescimento_Geometrica
+```
+
+Agora, calculando a razao de dependencia de cada ano para jovens e idosos
+
+```{r}
+#Colocando os intervalos de idade nas linhas
+
+rownames(Ceara1980) = Ceara1980$Idade
+
+Ceara1980 = Ceara1980[,-1]
+
+rownames(Ceara2010) = Ceara2010$Idade
+
+Ceara2010 = Ceara2010[,-1]
+```
+
+
+```{r}
+#Criando grupos de idade para agrupar as idades simples
+
+grupo_idade=cut(rep(0:32),breaks=c(0,0.99,4,9,14,19,20,21,22,23,24,25,26,27,28,29,30,31,32),include.lowest = T)
+
+Ceara1980.n=aggregate(Ceara1980,list(Idade=grupo_idade),sum)
+
+Ceara2010.n=aggregate(Ceara2010,list(Idade=grupo_idade),sum)
+```
+
+
+```{r}
+#Representando os intervalos de idade em apenas um numero
+
+Ceara1980.n$Idade=c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80)
+
+Ceara2010.n$Idade=c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80)
+```
+
+
+```{r}
+#Razao de dependencia para os jovens do Ceara em 1980
+
+Jovens1980 = with(Ceara1980.n, sum(Ceara1980.n[Ceara1980.n$Idade<15,4]))
+
+pop.ativa1980 = with(Ceara1980.n, sum(Ceara1980.n[Ceara1980.n$Idade>10 & Idade<65,4]))
+
+RD.jovens1980 = (Jovens1980/pop.ativa1980)*100
+
+RD.jovens1980
+```
+
+```{r}
+#Razao de dependencia para os idosos do Ceara em 1980
+
+Idosos1980=with(Ceara1980.n, sum(Ceara1980.n[Ceara1980.n$Idade>64,4]))
+
+RD.Idosos1980 = (Idosos1980/pop.ativa1980)*100
+
+RD.Idosos1980
+```
+
+```{r}
+#Razao de dependencia para os jovens do Ceara em 2010
+
+Jovens2010 = with(Ceara2010.n, sum(Ceara2010.n[Ceara2010.n$Idade<15,4]))
+
+pop.ativa2010 = with(Ceara2010.n, sum(Ceara2010.n[Ceara2010.n$Idade>10 & Idade<65,4]))
+
+RD.jovens2010 = (Jovens2010/pop.ativa2010)*100
+
+RD.jovens2010
+```
+
+```{r}
+#Razao de dependencia para os idosos do Ceara em 1980
+
+Idosos2010 = with(Ceara2010.n, sum(Ceara2010.n[Ceara2010.n$Idade>64,4]))
+
+RD.Idosos2010 = (Idosos2010/pop.ativa2010)*100
+
+RD.Idosos2010
+```

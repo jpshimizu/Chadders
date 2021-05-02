@@ -1,0 +1,85 @@
+---
+title: "Atividade 1 - ME721"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+path_df_idade = 'C:/Users/Windows 10/Desktop/ESTUDOS/1S2021/demografia/A171441189_28_143_208.csv'
+df_idade = read.csv(path_df_idade,sep=';', skip=3, nrows=33, header=T)
+
+df_idade = as_tibble(df_idade) %>% select(-Total)
+
+df_idade_juntas = df_idade[21:nrow(df_idade),]
+inicio = 1
+fim = 5
+
+for (i in 1:4){
+  idades_juntas = c("0 a 4 anos",
+                    "5 a 9 anos",
+                    "10 a 14 anos",
+                    "15 a 19 anos")
+  idade_masc = df_idade[inicio:fim,] %>% select(Masculino) %>% colSums() %>% as.vector()
+  idade_fem = df_idade[inicio:fim,] %>% select(Feminino) %>% colSums() %>% as.vector()
+  df_idade_juntas = rbind(df_idade_juntas,c(idades_juntas[i],idade_masc, idade_fem))
+  inicio = inicio + 5
+  fim = fim + 5
+  i = i + 1
+}
+
+df = df_idade_juntas 
+
+df = df %>% gather("sexo","n_pessoas",2:3)
+
+inicio = 0 
+fim = 4
+nomes_idades = NULL
+
+for (i in 1:17){
+  nomes_idades =  c(nomes_idades,paste0(inicio," a ",fim, ' anos'))
+  inicio = inicio + 5
+  fim = fim + 5
+}
+
+nomes_idades[length(nomes_idades)] = '80 anos e mais'
+
+df$Faixa.Etária.detalhada = as.factor(df$Faixa.Etária.detalhada)
+
+df$Faixa.Etária.detalhada = factor(df$Faixa.Etária.detalhada, levels = nomes_idades)
+
+df$sexo = as.factor(df$sexo)
+df$n_pessoas = as.numeric(df$n_pessoas)
+```
+
+```{r}
+df %>% ggplot(
+    aes(x = Faixa.Etária.detalhada,
+        y = n_pessoas, fill = sexo)
+    ) +
+  # agregar el argumento color = "white", si gustan
+    geom_col(position = "stack", alpha = 0.6) + 
+    coord_flip() +
+  # colores que me gustan
+    scale_fill_manual(values = c("midnightblue", "darkred")) +
+  # tema minimalista
+    theme_minimal() +
+  # leyenda para el fondo
+    theme(
+      legend.position = "bottom",
+      plot.caption = element_text(hjust = 0)) +
+  # etiquetas en positivo
+    scale_y_continuous(labels = abs) +
+    labs(
+      y = "Porcentaje de la población total",
+      x = "Quinquenios de edad",
+      title = "Pirámide de población de República Dominicana, año 2020", 
+      subtitle = "Edad en grupos quinquenales")
+```
+

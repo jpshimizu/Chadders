@@ -59,6 +59,42 @@ df$n_pessoas = as.numeric(df$n_pessoas)
 ```
 
 ```{r}
+path_df_idade10 = 'Ceara2010.csv'
+df_idade10 = read.csv(path_df_idade10,sep=';', skip=3, nrows=33, header=T)
+colnames(df_idade10)[1] <- 'Faixa.Etária.detalhada'
+
+df_idade10 = as_tibble(df_idade10) %>% select(-Total)
+
+df_idade_juntas10 = df_idade10[21:nrow(df_idade10),]
+inicio = 1
+fim = 5
+
+for (i in 1:4){
+  idades_juntas10 = c("0 a 4 anos",
+                    "5 a 9 anos",
+                    "10 a 14 anos",
+                    "15 a 19 anos")
+  idade_masc = df_idade10[inicio:fim,] %>% select(Masculino) %>% colSums() %>% as.vector()
+  idade_fem = df_idade10[inicio:fim,] %>% select(Feminino) %>% colSums() %>% as.vector()
+  df_idade_juntas10 = rbind(df_idade_juntas10,c(idades_juntas10[i],idade_masc, idade_fem))
+  inicio = inicio + 5
+  fim = fim + 5
+  i = i + 1
+}
+
+df10 = df_idade_juntas10 
+
+df10 = df10 %>% gather("sexo","n_pessoas",2:3)
+
+df10$Faixa.Etária.detalhada = as.factor(df10$Faixa.Etária.detalhada)
+
+df10$Faixa.Etária.detalhada = factor(df10$Faixa.Etária.detalhada, levels = nomes_idades)
+
+df10$sexo = as.factor(df10$sexo)
+df10$n_pessoas = as.numeric(df10$n_pessoas)
+```
+
+```{r}
 df %>% ggplot(
     aes(x = Faixa.Etária.detalhada,
         y = n_pessoas, fill = sexo)
@@ -85,22 +121,19 @@ df %>% ggplot(
 
 #Exercício 2
 ```{r}
-df2 <- df_idade_juntas %>% mutate(rate = as.integer(Masculino)/as.integer(Feminino) - 1)
-df2 %>% ggplot(aes(x = Faixa.Etária.detalhada, y = rate)) +
-  # agregar el argumento color = "white", si gustan
-    geom_col(position = "stack", alpha = 0.6) + 
-    coord_flip() +
-  # colores que me gustan
-    scale_fill_manual(values = c("midnightblue", "darkred")) +
-  # tema minimalista
-    theme_minimal() +
-  # leyenda para el fondo
-    theme(legend.position = "bottom", plot.caption = element_text(hjust = 0)) +
-  # etiquetas en positivo
-    scale_y_continuous(labels = abs) +
-    labs(
-      y = "Razão",
-      x = "Faixa Etária",
-      title = "Razão Masculino/Feminino Ceará 1980")
+df2 <- df_idade %>% mutate(rate = -as.integer(Masculino)/as.integer(Feminino))
+df102 <- df_idade10 %>% mutate(rate = as.integer(Masculino)/as.integer(Feminino))
+
+r <- as.data.frame(rbind(df2,df102)); r
+r$ano <-as.factor(c(rep(1980, 33), rep(2010,33)))
+r$Faixa.Etária.detalhada <- ordered(r$Faixa.Etária.detalhada, levels = c(r$Faixa.Etária.detalhada[1:33]))
+
+r %>% ggplot(aes(x = Faixa.Etária.detalhada, y = rate, fill = ano)) + 
+  geom_bar(data = subset(r, ano == "1980"), stat = "identity", fill = 'darkred', alpha = .6) + 
+  geom_bar(data = subset(r, ano == "2010"), stat = "identity", fill = 'midnightblue', alpha = .6) +  
+  theme_minimal() +
+  labs(y = "Razão", x = "Faixa Etária", title = "Razão Masculino/Feminino Ceará 1980/2010") +
+  theme(legend.position = "bottom", plot.caption = element_text(hjust = 0)) +
+  coord_flip()
 ```
 

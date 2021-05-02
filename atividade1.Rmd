@@ -12,7 +12,7 @@ library(tidyverse)
 ```
 
 ```{r}
-path_df_idade = 'C:/Users/Windows 10/Desktop/ESTUDOS/1S2021/demografia/A171441189_28_143_208.csv'
+path_df_idade = 'A171441189_28_143_208.csv'
 df_idade = read.csv(path_df_idade,sep=';', skip=3, nrows=33, header=T)
 
 df_idade = as_tibble(df_idade) %>% select(-Total)
@@ -83,4 +83,24 @@ df %>% ggplot(
       subtitle = "Edad en grupos quinquenales")
 ```
 
-Teste Shimizu
+#Exercício 2
+```{r}
+df2 <- df_idade_juntas %>% mutate(rate = as.integer(Masculino)/as.integer(Feminino) - 1)
+df2 %>% ggplot(aes(x = Faixa.Etária.detalhada, y = rate)) +
+  # agregar el argumento color = "white", si gustan
+    geom_col(position = "stack", alpha = 0.6) + 
+    coord_flip() +
+  # colores que me gustan
+    scale_fill_manual(values = c("midnightblue", "darkred")) +
+  # tema minimalista
+    theme_minimal() +
+  # leyenda para el fondo
+    theme(legend.position = "bottom", plot.caption = element_text(hjust = 0)) +
+  # etiquetas en positivo
+    scale_y_continuous(labels = abs) +
+    labs(
+      y = "Razão",
+      x = "Faixa Etária",
+      title = "Razão Masculino/Feminino Ceará 1980")
+```
+

@@ -11,14 +11,14 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-```{r, Leitura e definição dos dados}
-path_df_idade = 'A171441189_28_143_208.csv'
-df_idade = read.csv(path_df_idade,sep=';', skip=3, nrows=33, header=T)
-colnames(df_idade)[1] <- 'Faixa.Etária.detalhada'
+```{r, Leitura e definição dos dados ceará 1980}
+path_df_idade80 = 'A171441189_28_143_208.csv'
+df_idade80 = read.csv(path_df_idade80,sep=';', skip=3, nrows=33, header=T)
+colnames(df_idade80)[1] <- 'Faixa.Etária.detalhada'
 
-df_idade = as_tibble(df_idade) %>% select(-Total)
+df_idade80 = as_tibble(df_idade80) %>% select(-Total)
 
-df_idade_juntas = df_idade[21:nrow(df_idade),]
+df_idade_juntas80 = df_idade80[21:nrow(df_idade80),]
 inicio = 1
 fim = 5
 
@@ -27,17 +27,17 @@ for (i in 1:4){
                     "5 a 9 anos",
                     "10 a 14 anos",
                     "15 a 19 anos")
-  idade_masc = df_idade[inicio:fim,] %>% select(Masculino) %>% colSums() %>% as.vector()
-  idade_fem = df_idade[inicio:fim,] %>% select(Feminino) %>% colSums() %>% as.vector()
-  df_idade_juntas = rbind(df_idade_juntas,c(idades_juntas[i],idade_masc, idade_fem))
+  idade_masc = df_idade80[inicio:fim,] %>% select(Masculino) %>% colSums() %>% as.vector()
+  idade_fem = df_idade80[inicio:fim,] %>% select(Feminino) %>% colSums() %>% as.vector()
+  df_idade_juntas80 = rbind(df_idade_juntas80,c(idades_juntas[i],idade_masc, idade_fem))
   inicio = inicio + 5
   fim = fim + 5
-  i = i + 1
+  #i = i + 1
 }
 
-df = df_idade_juntas 
+df_80 = df_idade_juntas80 
 
-df = df %>% gather("sexo","n_pessoas",2:3)
+df_80 = df_80 %>% gather("sexo","n_pessoas",2:3)
 
 inicio = 0 
 fim = 4
@@ -51,15 +51,17 @@ for (i in 1:17){
 
 nomes_idades[length(nomes_idades)] = '80 anos e mais'
 
-df$Faixa.Etária.detalhada = as.factor(df$Faixa.Etária.detalhada)
+df_80$Faixa.Etária.detalhada = as.factor(df_80$Faixa.Etária.detalhada)
 
-df$Faixa.Etária.detalhada = factor(df$Faixa.Etária.detalhada, levels = nomes_idades)
+df_80$Faixa.Etária.detalhada = factor(df_80$Faixa.Etária.detalhada, levels = nomes_idades)
 
-df$sexo = as.factor(df$sexo)
-df$n_pessoas = as.numeric(df$n_pessoas)
+df_80$sexo = as.factor(df$sexo)
+df_80$n_pessoas = as.numeric(df$n_pessoas)
+
+df_80 = df_80 %>% mutate(perc_pop = if_else(sexo  == 'Masculino', -n_pessoas/sum(df_80$n_pessoas), n_pessoas/sum(df_80$n_pessoas)))
 ```
 
-```{r, Leitura e definição dos dados}
+```{r, Leitura e definição dos dados ceará 2010}
 path_df_idade10 = 'Ceara2010.csv'
 df_idade10 = read.csv(path_df_idade10,sep=';', skip=3, nrows=33, header=T)
 colnames(df_idade10)[1] <- 'Faixa.Etária.detalhada'
@@ -93,13 +95,15 @@ df10$Faixa.Etária.detalhada = factor(df10$Faixa.Etária.detalhada, levels = nom
 
 df10$sexo = as.factor(df10$sexo)
 df10$n_pessoas = as.numeric(df10$n_pessoas)
+
+df10 = df10 %>% mutate(perc_pop = if_else(sexo  == 'Masculino', -n_pessoas/sum(df10$n_pessoas), n_pessoas/sum(df10$n_pessoas)))
 ```
 
 # Exercício 1
-```{r}
-df %>% ggplot(
+```{r, piramide etaria 1980}
+df_80 %>% ggplot(
     aes(x = Faixa.Etária.detalhada,
-        y = n_pessoas, fill = sexo)
+        y = perc_pop, fill = sexo)
     ) +
   # agregar el argumento color = "white", si gustan
     geom_col(position = "stack", alpha = 0.6) + 
@@ -115,30 +119,97 @@ df %>% ggplot(
   # etiquetas en positivo
     scale_y_continuous(labels = abs) +
     labs(
-      y = "Porcentaje de la población total",
-      x = "Quinquenios de edad",
-      title = "Pirámide de población de República Dominicana, año 2020", 
-      subtitle = "Edad en grupos quinquenales")
+      y = "Porcentagem da população",
+      x = "Faixas etárias",
+      title = "Pirâmide etária do Estado do Ceará, ano 1980"
+      #subtitle = "Edad en grupos quinquenales"
+      )
+```
+
+```{r, piramide etaria 2010}
+df10 %>% ggplot(
+    aes(x = Faixa.Etária.detalhada,
+        y = perc_pop, fill = sexo)
+    ) +
+  # agregar el argumento color = "white", si gustan
+    geom_col(position = "stack", alpha = 0.6) + 
+    coord_flip() +
+  # colores que me gustan
+    scale_fill_manual(values = c("midnightblue", "darkred")) +
+  # tema minimalista
+    theme_minimal() +
+  # leyenda para el fondo
+    theme(
+      legend.position = "bottom",
+      plot.caption = element_text(hjust = 0)) +
+  # etiquetas en positivo
+    scale_y_continuous(labels = abs) +
+    labs(
+      y = "Porcentagem da população",
+      x = "Faixas etárias",
+      title = "Pirâmide etária do Estado do Ceará, ano 2010"
+      #subtitle = "Edad en grupos quinquenales"
+      )
 ```
 
 # Exercício 2
 ```{r}
-df2 <- df_idade %>% mutate(rate = -as.integer(Masculino)/as.integer(Feminino))
-df102 <- df_idade10 %>% mutate(rate = as.integer(Masculino)/as.integer(Feminino))
+#1980
+df_idade_juntas80$Faixa.Etária.detalhada = as.factor(df_idade_juntas80$Faixa.Etária.detalhada)
 
-r <- as.data.frame(rbind(df2,df102)); r
-r$ano <-as.factor(c(rep(1980, 33), rep(2010,33)))
-r$Faixa.Etária.detalhada <- ordered(r$Faixa.Etária.detalhada, levels = c(r$Faixa.Etária.detalhada[1:33]))
+df_idade_juntas80$Faixa.Etária.detalhada = factor(df_idade_juntas80$Faixa.Etária.detalhada, levels = nomes_idades)
 
-r %>% ggplot(aes(x = Faixa.Etária.detalhada, y = rate, fill = ano)) + 
-  geom_bar(data = subset(r, ano == "1980"), stat = "identity",  alpha = .6) + 
-  geom_bar(data = subset(r, ano == "2010"), stat = "identity",  alpha = .6) +  
-  scale_fill_manual(values = c("midnightblue", "darkred")) +
+df_idade_juntas80[order(df_idade_juntas80$Faixa.Etária.detalhada),] %>%
+  mutate(r_sexos = as.double(Masculino)/as.double(Feminino)) %>%
+  ggplot(aes(x = seq(1,nrow(df_idade_juntas80)),
+             y = r_sexos)) +
+  geom_line() +
+  scale_x_continuous(breaks = 1:(nrow(df_idade_juntas80)),
+    labels = levels(df_idade_juntas80$Faixa.Etária.detalhada))+
+  geom_abline(intercept = 1, slope = 0) + 
   theme_minimal() +
-  labs(y = "Razão", x = "Faixa Etária", title = "Razão Masculino/Feminino Ceará 1980/2010") +
-  theme(legend.position = "bottom", plot.caption = element_text(hjust = 0)) +
-  coord_flip()
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  # leyenda para el fondo
+    theme(
+      legend.position = "bottom",
+      plot.caption = element_text(hjust = 0))+
+  labs(
+      y = "Razão entre os sexos",
+      x = "Faixas etárias",
+      title = "Razão entre os sexos no Estado do Ceará, ano 1980"
+      #subtitle = "Edad en grupos quinquenales"
+      )
+  
 ```
+
+```{r}
+#1980
+df_idade_juntas10$Faixa.Etária.detalhada = as.factor(df_idade_juntas80$Faixa.Etária.detalhada)
+
+df_idade_juntas10$Faixa.Etária.detalhada = factor(df_idade_juntas10$Faixa.Etária.detalhada, levels = nomes_idades)
+
+df_idade_juntas10[order(df_idade_juntas80$Faixa.Etária.detalhada),] %>%
+  mutate(r_sexos = as.double(Masculino)/as.double(Feminino)) %>%
+  ggplot(aes(x = seq(1,nrow(df_idade_juntas10)),
+             y = r_sexos)) +
+  geom_line() +
+  scale_x_continuous(breaks = 1:(nrow(df_idade_juntas10)),
+    labels = levels(df_idade_juntas10$Faixa.Etária.detalhada))+
+  geom_abline(intercept = 1, slope = 0) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  # leyenda para el fondo
+    theme(
+      legend.position = "bottom",
+      plot.caption = element_text(hjust = 0))+
+  labs(
+      y = "Razão entre os sexos",
+      x = "Faixas etárias",
+      title = "Razão entre os sexos no Estado do Ceará, ano 2010"
+      #subtitle = "Edad en grupos quinquenales"
+      )
+```
+
 
 # Exercício 3
 Primeiramente, calculando a taxa de crescimento geometrica entre os anos 1980 e 2010 no Ceara

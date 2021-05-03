@@ -1,10 +1,34 @@
 ---
-title: "Atividade 1 - ME721"
 output: pdf_document
 ---
 
+```{=tex}
+\begin{titlepage} 
+\begin{center} 
+{\large Universidade Estadual de Campinas}\\[0.2cm] 
+{\large Instituto de Matemática, Estatística e Computação Científica}\\[0.2cm] 
+{\large Departamento de Estatística}\\[4cm]
+{\bf \huge  Atividade 1 - ME721}\\[0.9cm]
+{\large Integrantes:}\\[0.2cm]
+{\large Rodrigo Forti - 224191}\\[0.2cm]
+{\large João Pedro Shimizu Rodrigues - 218793}\\[0.2cm]
+{\large Guilherme Martins de Castro Gurgel - 217249}\\[11cm]
+{\large Campinas}\\[0.2cm]
+{\large 2021}
+\end{center}
+\end{titlepage}
+```
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.height = 3, 
+                      fig.width = 6, 
+                      fig.pos='H',
+                      OutDec = ',',
+                      comment = NA)
+options(OutDec = ",")
 ```
 
 ```{r}
@@ -55,8 +79,8 @@ df_80$Faixa.Etária.detalhada = as.factor(df_80$Faixa.Etária.detalhada)
 
 df_80$Faixa.Etária.detalhada = factor(df_80$Faixa.Etária.detalhada, levels = nomes_idades)
 
-df_80$sexo = as.factor(df$sexo)
-df_80$n_pessoas = as.numeric(df$n_pessoas)
+df_80$sexo = as.factor(df_80$sexo)
+df_80$n_pessoas = as.numeric(df_80$n_pessoas)
 
 df_80 = df_80 %>% mutate(perc_pop = if_else(sexo  == 'Masculino', -n_pessoas/sum(df_80$n_pessoas), n_pessoas/sum(df_80$n_pessoas)))
 ```
@@ -178,7 +202,9 @@ df_idade_juntas80[order(df_idade_juntas80$Faixa.Etária.detalhada),] %>%
       x = "Faixas etárias",
       title = "Razão entre os sexos no Estado do Ceará, ano 1980"
       #subtitle = "Edad en grupos quinquenales"
-      )
+      )+
+  annotate("rect", xmin = 1, xmax = length(seq(1,nrow(df_idade_juntas80))), ymin = 0.93, ymax = 1.07,
+        alpha = .5, fill =  "darkgrey")
   
 ```
 
@@ -207,7 +233,9 @@ df_idade_juntas10[order(df_idade_juntas80$Faixa.Etária.detalhada),] %>%
       x = "Faixas etárias",
       title = "Razão entre os sexos no Estado do Ceará, ano 2010"
       #subtitle = "Edad en grupos quinquenales"
-      )
+      )+
+  annotate("rect", xmin = 1, xmax = length(seq(1,nrow(df_idade_juntas80))), ymin = 0.93, ymax = 1.07,
+        alpha = .5, fill =  "darkgrey")
 ```
 
 

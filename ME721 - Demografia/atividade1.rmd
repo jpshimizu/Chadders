@@ -1,5 +1,28 @@
 ---
-output: pdf_document
+output: 
+  pdf_document:
+    fig_crop: no
+#bibliography: "referencias.bib"
+#nocite: '@*'
+#link-citations: true
+#colorlinks: false
+fontsize: 11pt
+documentclass: article
+geometry: 
+ - a4paper
+ - textwidth=16cm
+ - textheight=21cm
+header-includes:
+  - \usepackage[brazil, english, portuguese]{babel}
+  - \usepackage[utf8]{inputenc}
+  - \usepackage[T1]{fontenc}
+  - \usepackage[fixlanguage]{babelbib}
+  - \usepackage{times}
+  - \usepackage{caption} 
+  - \captionsetup[table]{skip=10pt}
+  - \usepackage{amsmath}
+  - \usepackage{indentfirst}
+indent: true
 ---
 
 ```{=tex}
@@ -12,7 +35,7 @@ output: pdf_document
 {\large Integrantes:}\\[0.2cm]
 {\large Rodrigo Forti - 224191}\\[0.2cm]
 {\large João Pedro Shimizu Rodrigues - 218793}\\[0.2cm]
-{\large Guilherme Martins de Castro Gurgel - 217249}\\[11cm]
+{\large Guilherme Martins de Castro Gurgel - 217249}\\[9cm]
 {\large Campinas}\\[0.2cm]
 {\large 2021}
 \end{center}
@@ -23,10 +46,11 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE, 
                       warning = FALSE,
                       message = FALSE,
-                      fig.height = 3, 
-                      fig.width = 6, 
+                      fig.height = 4, 
+                      fig.width = 7, 
                       fig.pos='H',
                       OutDec = ',',
+                      #out.extra = '',
                       comment = NA)
 options(OutDec = ",")
 ```
@@ -123,8 +147,13 @@ df10$n_pessoas = as.numeric(df10$n_pessoas)
 df10 = df10 %>% mutate(perc_pop = if_else(sexo  == 'Masculino', -n_pessoas/sum(df10$n_pessoas), n_pessoas/sum(df10$n_pessoas)))
 ```
 
-# Exercício 1
-```{r, piramide etaria 1980}
+# Estado escolhido: Estado do Ceará (CE)
+
+## Exercício 1
+
+Após um processo migratório intenso entre os anos de 1950 e 1970 para outras regiões do país, a pirâmide etária do Estado do Ceará, nos ano de 1980, ficou larga em sua base e afinada nas faixas etárias referentes aos adultos na idade de trabalho, como podemos ver na Figura 1.
+
+```{r, fig.cap = "Pirâmide etária do Estado do Ceará, ano 1980"}
 df_80 %>% ggplot(
     aes(x = Faixa.Etária.detalhada,
         y = perc_pop, fill = sexo)
@@ -150,7 +179,11 @@ df_80 %>% ggplot(
       )
 ```
 
-```{r, piramide etaria 2010}
+Como houve uma redução acentuada na imigração nordestina após a década de 1980 comparado com as taxas de imigração de períodos anteriores, a pirâmide etária do Estado do Ceará em 2010 sofreu influências mais significativas do crescimento vegetativo e envelhecimento da população, e não tanto da saída de pessoas. Podemos ver esse padrão na Figura 2, onde a faixa etária mais populosa são a de jovens adultos. 
+
+Como a imigração diminuiu entre 1980 e 2010, os jovens na idade de trabalho ficaram em sua terra natal. Esse é um dos principais motivos dos jovens adultos serem a minoria em 1980 e em 2010, serem a maioria.
+
+```{r, fig.cap="Pirâmide etária do Estado do Ceará, ano 2010"}
 df10 %>% ggplot(
     aes(x = Faixa.Etária.detalhada,
         y = perc_pop, fill = sexo)
@@ -176,8 +209,9 @@ df10 %>% ggplot(
       )
 ```
 
-# Exercício 2
-```{r}
+## Exercício 2
+
+```{r, fig.cap="Razão entre os sexos no Estado do Ceará, ano 1980"}
 #1980
 df_idade_juntas80$Faixa.Etária.detalhada = as.factor(df_idade_juntas80$Faixa.Etária.detalhada)
 
@@ -208,7 +242,7 @@ df_idade_juntas80[order(df_idade_juntas80$Faixa.Etária.detalhada),] %>%
   
 ```
 
-```{r}
+```{r, fig.cap="Razão entre os sexos no Estado do Ceará, ano 2010"}
 #1980
 df_idade_juntas10$Faixa.Etária.detalhada = as.factor(df_idade_juntas80$Faixa.Etária.detalhada)
 
@@ -239,7 +273,7 @@ df_idade_juntas10[order(df_idade_juntas80$Faixa.Etária.detalhada),] %>%
 ```
 
 
-# Exercício 3
+## Exercício 3
 Primeiramente, calculando a taxa de crescimento geometrica entre os anos 1980 e 2010 no Ceara
 
 ```{r}
@@ -266,16 +300,17 @@ pop1980 = sum(Ceara1980$Total)
 pop2010 = sum(Ceara2010$Total)
 ```
 
+A taxa de crescimento geométrico entre os anos 1980 e 2010 no Ceará foi de 1,578769. Isso significa que a população no Ceará cresceu em média 157,8796% por ano nesse intervalo de tempo. Essa taxa não foi muito influenciada pelas migrações. Os fluxos migratórios ocorreram de forma mais intensa entre 1880 e 1970. Portanto, esse aumento na população foi devido ao crescimento vegetativo no Ceará.
+
 
 ```{r}
 #Formula para Taxa de Crescimento Geometrica: (raiz(n)(Pt/P0)-1)*100 onde n = 30 (Diferenca entre os anos 1980 e 2010)
 
 Taxa_Crescimento_Geometrica = (((pop2010/pop1980)^(1/30))-1)*100
 
-Taxa_Crescimento_Geometrica
+#Taxa_Crescimento_Geometrica
 ```
 
-Agora, calculando a razao de dependencia de cada ano para jovens e idosos
 
 ```{r}
 #Colocando os intervalos de idade nas linhas
@@ -310,6 +345,20 @@ Ceara2010.n$Idade=c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80)
 ```
 
 
+Agora, calculando a razao de dependencia de cada ano para jovens e idosos. A fórmula para calcular a razão de dependência de jovens ou idosos em um determinado ano é: $(P/PopAtiva)× 100$, onde $P$ é o total de jovens e idosos neste ano e $PopAtiva$ é o total da população ativa. Uma pessoa é considerada jovem quando tem menos de 15 anos de idade. Uma pessoa é considerada idosa quando tem mais de 64 anos de idade. A população ativa são as pessoas entre 11 e 64 anos de idade. Foi obtido as seguintes estimativas para o Estado do Ceará:
+
+* Razão de dependência para os jovens em 1980 = 80,074
+
+* Razão de dependência para os idosos em 1980 = 8,390
+
+* Razão de dependência para os jovens em 2010 = 38,919
+
+* Razão de dependência para os idosos em 2010 = 11,410
+
+
+Como já foi calculado, a razão de dependência dos jovens em 1980 no Ceará foi de 80, 07486 e dos idosos foi de 8, 390. Isso significa que em 1980 a razão de dependência total foi de 88,465. Ou seja, pela estimativa, aproximadamente 88,5% da população neste ano era dependente. Isso é um número muito alto que causa um atraso no crescimento econômico de uma região. Já em 2010, a razão de dependência total foi de 50,329. Ou seja, aproximadamente 50,3% da população dependia
+economicamente da população ativa. Houve um declínio da razão de dependência nessa região e isso se deve ao processo de transição demográfica. A redução dos níveis de fecundidade leva à diminuição das taxas de natalidade, implicando no decréscimo da parcela jovem da população. A população idosa, portanto, se eleva. O denominador, por sua vez, ainda vem aumentando, pela incorporação de grupos provenientes de épocas de alta fecundidade.
+
 ```{r}
 #Razao de dependencia para os jovens do Ceara em 1980
 
@@ -319,7 +368,7 @@ pop.ativa1980 = with(Ceara1980.n, sum(Ceara1980.n[Ceara1980.n$Idade>10 & Idade<6
 
 RD.jovens1980 = (Jovens1980/pop.ativa1980)*100
 
-RD.jovens1980
+#RD.jovens1980
 ```
 
 ```{r}
@@ -329,7 +378,7 @@ Idosos1980=with(Ceara1980.n, sum(Ceara1980.n[Ceara1980.n$Idade>64,4]))
 
 RD.Idosos1980 = (Idosos1980/pop.ativa1980)*100
 
-RD.Idosos1980
+#RD.Idosos1980
 ```
 
 ```{r}
@@ -341,7 +390,7 @@ pop.ativa2010 = with(Ceara2010.n, sum(Ceara2010.n[Ceara2010.n$Idade>10 & Idade<6
 
 RD.jovens2010 = (Jovens2010/pop.ativa2010)*100
 
-RD.jovens2010
+#RD.jovens2010
 ```
 
 ```{r}
@@ -351,5 +400,5 @@ Idosos2010 = with(Ceara2010.n, sum(Ceara2010.n[Ceara2010.n$Idade>64,4]))
 
 RD.Idosos2010 = (Idosos2010/pop.ativa2010)*100
 
-RD.Idosos2010
+#RD.Idosos2010
 ```

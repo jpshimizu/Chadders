@@ -82,7 +82,7 @@ for (i in 1:4){
   fim = fim + 5
   #i = i + 1
 }
-
+##
 df_80 = df_idade_juntas80 
 
 df_80 = df_80 %>% gather("sexo","n_pessoas",2:3)

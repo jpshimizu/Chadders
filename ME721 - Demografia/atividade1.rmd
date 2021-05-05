@@ -21,6 +21,7 @@ header-includes:
   - \usepackage{caption} 
   - \captionsetup[table]{skip=10pt}
   - \usepackage{amsmath}
+  - \usepackage{float}
   - \usepackage{indentfirst}
 indent: true
 ---
@@ -35,7 +36,7 @@ indent: true
 {\large Integrantes:}\\[0.2cm]
 {\large Rodrigo Forti - 224191}\\[0.2cm]
 {\large João Pedro Shimizu Rodrigues - 218793}\\[0.2cm]
-{\large Guilherme Martins de Castro Gurgel - 217249}\\[9cm]
+{\large Guilherme Martins de Castro Gurgel - 217249}\\[10cm]
 {\large Campinas}\\[0.2cm]
 {\large 2021}
 \end{center}
@@ -108,6 +109,7 @@ df_80$n_pessoas = as.numeric(df_80$n_pessoas)
 
 df_80 = df_80 %>% mutate(perc_pop = if_else(sexo  == 'Masculino', -n_pessoas/sum(df_80$n_pessoas), n_pessoas/sum(df_80$n_pessoas)))
 ```
+
 
 ```{r, Leitura e definição dos dados ceará 2010}
 path_df_idade10 = 'Ceara2010.csv'
@@ -183,7 +185,8 @@ Como houve uma redução acentuada na imigração nordestina após a década de 
 
 Como a imigração diminuiu entre 1980 e 2010, os jovens na idade de trabalho ficaram em sua terra natal. Esse é um dos principais motivos dos jovens adultos serem a minoria em 1980 e em 2010, serem a maioria.
 
-```{r, fig.cap="Pirâmide etária do Estado do Ceará, ano 2010"}
+
+```{r, fig.cap="Pirâmide etária do Estado do Ceará, ano 2010",fig.pos="H"}
 df10 %>% ggplot(
     aes(x = Faixa.Etária.detalhada,
         y = perc_pop, fill = sexo)
@@ -210,6 +213,7 @@ df10 %>% ggplot(
 ```
 
 ## Exercício 2
+
 
 ```{r, fig.cap="Razão entre os sexos no Estado do Ceará, ano 1980"}
 #1980
@@ -240,8 +244,11 @@ df_idade_juntas80[order(df_idade_juntas80$Faixa.Etária.detalhada),] %>%
   annotate("rect", xmin = 1, xmax = length(seq(1,nrow(df_idade_juntas80))), ymin = 0.93, ymax = 1.07,
         alpha = .5, fill =  "darkgrey")
 ```
-Observando primeiramente o ano de 1980 vemos que a razão entre os sexos é menor do que um para as faixas etárias maiores que 10 anos, o que, levando em consideração o exercício 1, significa que a população é em sua maioria feminina. 
-É importante notar também que isso pode nos sugerir que o indice de saída de homens do Ceará é maior do que o das mulheres, outra possibilidade seria que o tempo médio de vida masculino fosse menor do que o feminino. Podemos observar isso pois apenas na faixa etária de 0 a 9 anos foi registrada uma maioria masculina, tendo pontos mínimos no intervalo de 25 a 29 anos e 80 anos ou mais, registrando respectivamente uma razão de 0,861 e 0,813.
+
+Observando primeiramente o ano de 1980, referente a Figura 3, vemos que a razão entre os sexos é menor do que um para as faixas etárias maiores que 10 anos, o que, levando em consideração o exercício 1, significa que a população é em sua maioria feminina. 
+
+É importante notar também que isso pode nos sugerir que o índice de saída por imigração de homens do Ceará é maior do que o das mulheres, outra possibilidade seria que o tempo médio de vida masculino fosse menor do que o feminino. Podemos observar isso pois apenas na faixa etária de 0 a 9 anos foi registrada uma maioria masculina, tendo pontos mínimos no intervalo de 25 a 29 anos e 80 anos ou mais, registrando respectivamente uma razão de 0,861 e 0,813.
+
 ```{r, fig.cap="Razão entre os sexos no Estado do Ceará, ano 2010"}
 #1980
 df_idade_juntas10$Faixa.Etária.detalhada = as.factor(df_idade_juntas80$Faixa.Etária.detalhada)
@@ -271,9 +278,13 @@ df_idade_juntas10[order(df_idade_juntas80$Faixa.Etária.detalhada),] %>%
   annotate("rect", xmin = 1, xmax = length(seq(1,nrow(df_idade_juntas80))), ymin = 0.93, ymax = 1.07,
         alpha = .5, fill =  "darkgrey")
 ```
-Agora neste gráfico de 2010 podemos analisar uma situação bem parecida com a descrita anteriormente, onde vemos uma maioria feminina em quase todas as faixas etárias. Mais do que isso, podemos comparar sua população com a de 1980, onde os indivíduos da faixa etária de 0 a 4 anos em 1980 correspondem aos indivíduos de 30 a 34 anos em 2010. Realizando esta comparação vemos que a razão cai 1,015 de para 0,947, o que sustenta nossa possibilidade de que mais homens estão saindo da nossa população do que mulheres, ou mais mulheres estão entrando. Em outras faixas etárias esta análise nos diz o mesmo, mostrando uma queda na razão entre os sexos.
+
+Agora na Figura 4 podemos analisar uma situação semelhante com a descrita anteriormente, onde vemos uma maioria feminina em quase todas as faixas etárias com mais de 20 anos. Mais do que isso, podemos comparar sua população com a de 1980, onde os indivíduos da faixa etária de 0 a 4 anos em 1980 correspondem aos indivíduos de 30 a 34 anos em 2010. Realizando esta comparação vemos que a razão cai 1,015 de para 0,947, o que sustenta nossa possibilidade de que mais homens estão saindo da nossa população do que mulheres, ou mais mulheres estão entrando. Em outras faixas etárias esta análise nos diz o mesmo, mostrando uma queda na razão entre os sexos.
+
+Com a diminuição na imigração entre os anos de 1980 e 2010, os homens cearenses não saíram de sua terra natal de forma intensa, por isso vemos um equilíbrio maior no número de homens e de mulheres na idade de trabalho em 2010 no Estado comparado com 1980.
 
 ## Exercício 3
+
 Primeiramente, calculando a taxa de crescimento geometrica entre os anos 1980 e 2010 no Ceara
 
 ```{r}
@@ -345,7 +356,7 @@ Ceara2010.n$Idade=c(0,1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80)
 ```
 
 
-Agora, calculando a razao de dependencia de cada ano para jovens e idosos. A fórmula para calcular a razão de dependência de jovens ou idosos em um determinado ano é: $(P/PopAtiva)× 100$, onde $P$ é o total de jovens e idosos neste ano e $PopAtiva$ é o total da população ativa. Uma pessoa é considerada jovem quando tem menos de 15 anos de idade. Uma pessoa é considerada idosa quando tem mais de 64 anos de idade. A população ativa são as pessoas entre 11 e 64 anos de idade. Foi obtido as seguintes estimativas para o Estado do Ceará:
+Agora, calculando a razao de dependencia de cada ano para jovens e idosos. A fórmula para calcular a razão de dependência de jovens ou idosos em um determinado ano é: $(P/PopAtiva).100$, onde $P$ é o total de jovens e idosos neste ano e $PopAtiva$ é o total da população ativa. Uma pessoa é considerada jovem quando tem menos de 15 anos de idade. Uma pessoa é considerada idosa quando tem mais de 64 anos de idade. A população ativa são as pessoas entre 11 e 64 anos de idade. Foi obtido as seguintes estimativas para o Estado do Ceará:
 
 * Razão de dependência para os jovens em 1980 = 80,074
 

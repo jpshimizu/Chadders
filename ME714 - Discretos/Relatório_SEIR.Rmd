@@ -1,0 +1,63 @@
+---
+output: 
+  pdf_document:
+    fig_crop: no
+#bibliography: "referencias.bib"
+#nocite: '@*'
+#link-citations: true
+#colorlinks: false
+fontsize: 11pt
+documentclass: article
+geometry: 
+ - a4paper
+ - textwidth=16cm
+ - textheight=21cm
+header-includes:
+  - \usepackage[brazil, english, portuguese]{babel}
+  - \usepackage[utf8]{inputenc}
+  - \usepackage[T1]{fontenc}
+  - \usepackage[fixlanguage]{babelbib}
+  - \usepackage{times}
+  - \usepackage{caption} 
+  - \captionsetup[table]{skip=10pt}
+  - \usepackage{amsmath}
+  - \usepackage{float}
+  - \usepackage{indentfirst}
+indent: true
+---
+
+```{=tex}
+\begin{titlepage} 
+\begin{center} 
+{\large Universidade Estadual de Campinas}\\[0.2cm] 
+{\large Instituto de Matemática, Estatística e Computação Científica}\\[0.2cm] 
+{\large Departamento de Estatística}\\[4cm]
+{\bf \huge Aplicação do modelo SEIR para previsão da têndencia da COVID-19 na XXXXXX}\\[0.9cm]
+{\large Integrantes:}\\[0.2cm]
+{\large Jadson Rodigo Silva de Oliveira -  218405}\\[0.2cm]
+{\large João Pedro Shimizu Rodrigues - 218793}\\[0.2cm]
+{\large Guilherme Martins de Castro Gurgel - 217249}\\[0.2cm]
+{\large Rodrigo Forti - 224191}\\[8.5cm]
+{\large Campinas}\\[0.2cm]
+{\large 2021}
+\end{center}
+\end{titlepage}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.height = 4, 
+                      fig.width = 7, 
+                      fig.pos='H',
+                      OutDec = ',',
+                      #out.extra = '',
+                      comment = NA)
+options(OutDec = ",")
+```
+
+```{r}
+library(tidyverse)
+```
+

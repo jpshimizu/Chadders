@@ -65,8 +65,20 @@ library(tidyverse)
 #Carregando os dados
 rs_pop_2000 = read_delim("RS_popresidente_2000.csv",skip = 3,delim = ";",n_max = 33)
 rs_pop_2010 = read_delim("RS_popresidente_2010.csv",skip = 3,delim = ";",n_max = 33)
-rs_nasc_2000 = read_delim("RS_Nascimentos_2000.csv",skip = 3,delim = ";",n_max = 10)
-rs_nasc_2010 = read_delim("RS_Nascimentos_2010.csv",skip = 3,delim = ";",n_max = 10)
+rs_nasc_datasus_2000 = read_delim("RS_Nascimentos_2000.csv",skip = 3,delim = ";",n_max = 10)
+rs_nasc_datasus_2010 = read_delim("RS_Nascimentos_2010.csv",skip = 3,delim = ";",n_max = 10)
+rs_nasc_sidra_2000 = read_delim("rs_nasc_sidra_2000.csv", delim = ',', col_names = FALSE, na = '-')
+rs_nasc_sidra_2010 = read_delim("rs_nasc_sidra_2010.csv", delim = ';', col_names = FALSE, na = '-')
+
+#Nome das colunas
+colnames(rs_nasc_sidra_2000) = c("UF","Total","Idade","Nasc")
+colnames(rs_nasc_sidra_2010) = c("UF","Total","Idade","Nasc")
+rs_nasc_sidra_2000 = rs_nasc_sidra_2000 %>% dplyr::select(Idade,Nasc)
+rs_nasc_sidra_2010 = rs_nasc_sidra_2010 %>% dplyr::select(Idade,Nasc)
+colnames(rs_nasc_datasus_2000) = c("Idade","Nasc")
+colnames(rs_nasc_datasus_2010) = c("Idade","Nasc")
+colnames(rs_pop_2000) = c("Idade","Masc","Femi","Total")
+colnames(rs_pop_2010) = c("Idade","Masc","Femi","Total")
 ```
 
 # Estado escolhido: Estado do Rio Grande do Sul (RS)

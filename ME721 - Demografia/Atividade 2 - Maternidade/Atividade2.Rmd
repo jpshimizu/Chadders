@@ -59,6 +59,9 @@ options(OutDec = ",")
 ```{r}
 #Pacotes
 library(tidyverse)
+library(kableExtra)
+library(knitr)
+library(patchwork)
 ```
 
 ```{r}
@@ -85,33 +88,137 @@ colnames(rs_pop_2010) = c("Idade","Masc","Femi","Total")
 
 ## Exercício 1
 
-$ \frac{\text{#filhos de residentes nascidos vivos neste ano}}{\text{#residentes neste ano}} $
+$$ Taxa\: Bruta\: de\: Natalidade = \frac{numero\: de\: filhos\: de\: residentes\: nascidos\: vivos\: neste\: ano}{numero\: de\: residentes\: neste\: ano}$$
 ```{r}
 #Taxa Bruta de Natalidade
 n2000 <- sum(rs_pop_2000$Total); n2010 <- sum(rs_pop_2010$Total)
 tab1 <- data.frame(Datasus = c(sum(rs_nasc_datasus_2000$Nasc)/n2000 * 1000, sum(rs_nasc_datasus_2010$Nasc)/n2010 * 1000),
 Sidra = c(sum(rs_nasc_sidra_2000$Nasc[c(1:12)])/n2000 * 1000, sum(rs_nasc_sidra_2010$Nasc)/n2010 * 1000))
 rownames(tab1) <- c('2000','2010')
-tab1 %>% round(3)
+tab1 %>% round(3) %>%
+  kable("latex",caption = "Estimativa para a taxa bruta de natalidade nos de 2000 e 2010 no Estado do Rio Grande do Sul pelos dados do Datasus e do Sidra.") %>%
+  kable_styling(position = "center",latex_options = "HOLD_position")
+
 ```
 
-Esta estatística mostra quantas pessoas a cada 1000 nasceram vivas neste ano. E como podemos ver na tabela houve um claro declínio, independente da fonte que usarmos para fazer esta análise. Isso se da muitas vezes pela queda de mulheres em uma faixa etária fértil no período sendo avaliado, em geral podemos falar que é provável que a porcentagem de mulheres jovens em 2000 era maior que em 2010, ou os casais perderam um pouco do interesse de ter filhos.
+Esta estatística mostra quantas pessoas a cada 1000 nasceram vivas neste ano. E como podemos ver na Tabela 1 houve um claro declínio, independente da fonte que usarmos para fazer esta análise. Isso se dá muitas vezes pela queda de mulheres em uma faixa etária fértil no período sendo avaliado, em geral podemos falar que é provável que a porcentagem de mulheres jovens em 2000 era maior que em 2010, ou os casais perderam um pouco do interesse de ter filhos.
 
 ## Exercício 2
 
-$ \frac{\text{#filhos de residentes nascidos vivos neste ano}}{\text{#mulheres entre 15 e 49 anos}} $
+$$Taxa\: de\: Fecundidade\: Geral =  \frac{numero\: de\: filhos\: de\: residentes\: nascidos\: vivos\: neste\: ano}{numero\: de\: mulheres\: entre\: 15\: e\: 49\: anos} $$
 ```{r}
 #Taxa de Fecundidade Geral
-n2000 <- sum(rs_pop_2000$Femi[c(16:26)]); n2010 <- sum(rs_pop_2010$Femi[c(16:26)])
-tab2 <- data.frame(Datasus = c(sum(rs_nasc_datasus_2000$Nasc)/n2000, sum(rs_nasc_datasus_2010$Nasc)/n2010),
-Sidra = c(sum(rs_nasc_sidra_2000$Nasc[c(1:12)])/n2000, sum(rs_nasc_sidra_2010$Nasc)/n2010))
+n2000 <- sum(rs_pop_2000$Femi[c(16:26)])
+n2010 <- sum(rs_pop_2010$Femi[c(16:26)])
+
+tab2 <- data.frame(Datasus = c(sum(1000*rs_nasc_datasus_2000$Nasc)/n2000,
+                               sum(1000*rs_nasc_datasus_2010$Nasc)/n2010),
+                   Sidra = c(sum(1000*rs_nasc_sidra_2000$Nasc[c(1:12)])/n2000,
+                             sum(1000*rs_nasc_sidra_2010$Nasc)/n2010))
 rownames(tab2) <- c('2000','2010')
-tab2 %>% round(3)
-rs_pop_2000
+tab2 %>% round(3) %>%
+  kable("latex",caption = "Estimativa para a taxa de fecundidade geral nos anos de 2000 e 2010 no Estado do Rio Grande do Sul pelos dados do Datasus e do Sidra.") %>%
+  kable_styling(position = "center",latex_options = "HOLD_position")
+#rs_pop_2000
 ```
 
-Com esta estatística podemos ver a estimativa do número médio de filhos que uma mulher tem em um dados ano (analisando o seu período fértil). Para nos ajudar a visualizar os dados podemos multiplicar por 1000 a tabela, e vemos que a quantidade de filhos esperados para um conjunto de mil mulheres caiu de algo entre 63-72 para algo entre 45-50, o que mais uma vez indica queda de interesse em casais terem filhos.
+Com esta estatística podemos ver a estimativa do número médio de filhos que uma mulher tem em um dado ano (analisando o seu período fértil). Vemos pela Tabela 2 que a quantidade de filhos esperados para um conjunto de mil mulheres caiu de algo entre 63-72 para algo entre 45-50, o que mais uma vez indica queda de interesse em casais terem filhos.
 
 ## Exercício 3
 
+A Taxa Específica de Fecundidade (TEF) trata-se do número médio de filhos nascidos vivos, tidos por uma mulher, por faixa etária específica do período reprodutivo, na população residente em determinado espaço geográfico, no ano considerado. Ela mede a intensidade de fecundidade a que as mulheres estão sujeitas em cada grupo etário do período reprodutivo (de 15 a 49 anos de idade). A fórmula da Taxa Específica de Fecundidade é dada por:
+
+$$Taxa\: Especifica\: de\: Fecundidade =  \frac{numero\: de\: filhos\: nascidos\: vivos\: de\: maes\: de\: determinada\: faixa\: etaria}{Populacao\: total\: feminina\: nesta\: mesma\: faixa\: etaria} $$
+
+Podemos ver as TEF para o Estado do Rio Grande do Sul nos anos de 2000 e 2010 na Figura 1.
+
+
+```{r}
+
+## Exerc?cio 3
+
+##DATASUS
+
+# Calculando as Taxas Espec?ficas de Fecundidade (TEF) para as faixas et?rias 15 a 19, 20 a 24, 25 a 29, 30 a 34, 35 a 39, 40 a 44 e 45 a 49 para o ano 2000
+
+Mulheres_2000 = c(sum(rs_pop_2000$Femi[16:20]),rs_pop_2000$Femi[21:26])
+TEF_2000 = round((rs_nasc_datasus_2000$Nasc[2:8])/(Mulheres_2000), digits = 4)
+
+
+# Calculando as Taxas Espec?ficas de Fecundidade (TEF) para as faixas et?rias 15 a 19, 20 a 24, 25 a 29, 30 a 34, 35 a 39, 40 a 44 e 45 a 49 para o ano 2010
+
+
+Mulheres_2010 = c(sum(rs_pop_2010$Femi[16:20]),rs_pop_2010$Femi[21:26])
+TEF_2010 = round((rs_nasc_datasus_2010$Nasc[2:8])/(Mulheres_2010), digits = 4)
+
+
+
+# Calculando a Taxa de Fecundidade Total (TFT) para o ano 2000
+
+TFT_2000 = sum(TEF_2000)*5
+
+
+# Calculando a Taxa de Fecundidade Total (TFT) para o ano 2010
+
+
+TFT_2010 = sum(TEF_2010)*5
+
+
+
+## Grafico das taxas ###
+
+
+##SIDRA
+
+
+TEF_2000_SIDRA = round((c(rs_nasc_sidra_2000$Nasc[2], rs_nasc_sidra_2000$Nasc[5], rs_nasc_sidra_2000$Nasc[6], rs_nasc_sidra_2000$Nasc[7], rs_nasc_sidra_2000$Nasc[8], rs_nasc_sidra_2000$Nasc[9], rs_nasc_sidra_2000$Nasc[10]))/(Mulheres_2000), digits = 4)
+
+
+
+TEF_2010_SIDRA = round((c(rs_nasc_sidra_2010$Nasc[2], rs_nasc_sidra_2010$Nasc[5], rs_nasc_sidra_2010$Nasc[6], rs_nasc_sidra_2010$Nasc[7], rs_nasc_sidra_2010$Nasc[8], rs_nasc_sidra_2010$Nasc[9], rs_nasc_sidra_2010$Nasc[10]))/(Mulheres_2010), digits = 4)
+
+
+
+TFT_2000_SIDRA = sum(TEF_2000_SIDRA)*5
+
+
+
+TFT_2010_SIDRA = sum(TEF_2010_SIDRA)*5
+
+```
+
+
+
+```{r, fig.cap = "Taxas Específicas de Fecundidade para os anos de 2000 (esquerda) e 2010 (direita) para o Estado do Rio Grande do Sul. A cor azul representa o DATASUS e a cor vermelha, o SIDRA.", fig.width= 10}
+#Graficos
+
+G2000 = ggplot(data = data.frame(Faixa_Etaria = c(rs_nasc_sidra_2000$Idade[2], rs_nasc_sidra_2000$Idade[5:10]), TEF = TEF_2000_SIDRA), aes(x = Faixa_Etaria, y = TEF)) + geom_point(col = "red") + geom_point(data = data.frame(Faixa_Etaria = rs_nasc_datasus_2000$Idade[2:8], TEF_2000), aes(x = Faixa_Etaria, y = TEF_2000), col = "blue") + ylim(c(0,0.12))+ theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+G2010 = ggplot(data = data.frame(Faixa_Etaria = c(rs_nasc_sidra_2010$Idade[2], rs_nasc_sidra_2010$Idade[5:10]), TEF = TEF_2010_SIDRA), aes(x = Faixa_Etaria, y = TEF)) + geom_point(col = "red") + geom_point(data = data.frame(Faixa_Etaria = rs_nasc_datasus_2010$Idade[2:8], TEF_2010), aes(x = Faixa_Etaria, y = TEF_2010), col = "blue") + ylim(c(0,0.12)) + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+G2000 + G2010
+```
+
+
+A Taxa de Fecundidade Total (TFT) trata-se do número médio de filhos nascidos vivos tidos por uma mulher ao fim do seu período reprodutivo. A fórmula da Taxa de Fecundidade Total (TFT) é dada por:
+
+$$TFT = 5  \sum{TEF},$$ 
+ou seja, é 5 vezes a soma de todas as Taxas Específicas de Fecundidade. O motivo dessa multiplicação é porque os intervalos são de 5 em 5 anos. 
+
+- Com base no DATASUS, a Taxa de Fecundidade Total (TFT) para o ano 2000 é: 2,096
+
+- Com base no DATASUS, a Taxa de Fecundidade Total (TFT) para o ano 2010 é: 1,56
+
+- Com base no SIDRA, a Taxa de Fecundidade Total (TFT) para o ano 2000 é: 2,058
+
+- Com base no SIDRA, a Taxa de Fecundidade Total (TFT) para o ano 2010 é: 1,4715
+
+Observa-se que as Taxas Específicas de Fecundidade diminuem drasticamente de 2000 para 2010 em todas as faixas etárias. Alguns motivos desse fenômeno são: a disseminação dos métodos contraceptivos, o êxodo rural e o processo de urbanização, o aumento da proporção de mulheres no mercado de trabalho e o aumento da escolarização da população. Nota-se também que o intervalo de 20 a 29 anos contém as maiores TEF em ambos os anos. Além disso, em geral os dados do DATASUS resultam em TEF um pouco maiores do que os dados do SIDRA.
+
 ## Exercício 4
+
+Como podemos ver pelos exercícios anteriores e, principalmente, pelos gráficos da figura 1, as duas fontes de dados não apresentaram grandes diferenças. As estimativas para as taxas calculadas deram uma diferença mínima entre as fontes.
+
+Pela Figura 1, as maiores diferenças na TEF foram vistas nas mães nas faixas etárias de 15 a 19 e 20 a 24 anos. Um possíveis motivos para isso ter ocorrido é que mães nessas faixas etárias são normalmente mais marginalizadas, logo uma das fontes pode não ter um acesso fácil à essas mães. E consequentemente, um viés maior na coleta pode ocorrer.

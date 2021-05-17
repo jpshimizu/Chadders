@@ -85,7 +85,29 @@ colnames(rs_pop_2010) = c("Idade","Masc","Femi","Total")
 
 ## Exercício 1
 
+$ \frac{\text{#filhos de residentes nascidos vivos neste ano}}{\text{#residentes neste ano}} $
+```{r}
+#Taxa Bruta de Natalidade
+n2000 <- sum(rs_pop_2000$Total); n2010 <- sum(rs_pop_2010$Total)
+tab1 <- data.frame(Datasus = c(sum(rs_nasc_datasus_2000$Nasc)/n2000 * 1000, sum(rs_nasc_datasus_2010$Nasc)/n2010 * 1000),
+Sidra = c(sum(rs_nasc_sidra_2000$Nasc[c(1:12)])/n2000 * 1000, sum(rs_nasc_sidra_2010$Nasc)/n2010 * 1000))
+rownames(tab1) <- c('2000','2010')
+tab1 %>% round(3)
+```
+
+
 ## Exercício 2
+
+$ \frac{\text{#filhos de residentes nascidos vivos neste ano}}{\text{#mulheres entre 15 e 49 anos}} $
+```{r}
+#Taxa de Fecundidade Geral
+n2000 <- sum(rs_pop_2000$Total[c(16:26)]); n2010 <- sum(rs_pop_2010$Total[c(16:26)])
+tab2 <- data.frame(Datasus = c(sum(rs_nasc_datasus_2000$Nasc)/n2000, sum(rs_nasc_datasus_2010$Nasc)/n2010),
+Sidra = c(sum(rs_nasc_sidra_2000$Nasc[c(1:12)])/n2000, sum(rs_nasc_sidra_2010$Nasc)/n2010))
+rownames(tab2) <- c('2000','2010')
+tab2 %>% round(3)
+rs_pop_2000
+```
 
 ## Exercício 3
 

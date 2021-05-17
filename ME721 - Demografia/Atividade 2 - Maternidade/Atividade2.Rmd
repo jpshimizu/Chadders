@@ -95,19 +95,22 @@ rownames(tab1) <- c('2000','2010')
 tab1 %>% round(3)
 ```
 
+Esta estatística mostra quantas pessoas a cada 1000 nasceram vivas neste ano. E como podemos ver na tabela houve um claro declínio, independente da fonte que usarmos para fazer esta análise. Isso se da muitas vezes pela queda de mulheres em uma faixa etária fértil no período sendo avaliado, em geral podemos falar que é provável que a porcentagem de mulheres jovens em 2000 era maior que em 2010, ou os casais perderam um pouco do interesse de ter filhos.
 
 ## Exercício 2
 
 $ \frac{\text{#filhos de residentes nascidos vivos neste ano}}{\text{#mulheres entre 15 e 49 anos}} $
 ```{r}
 #Taxa de Fecundidade Geral
-n2000 <- sum(rs_pop_2000$Total[c(16:26)]); n2010 <- sum(rs_pop_2010$Total[c(16:26)])
+n2000 <- sum(rs_pop_2000$Femi[c(16:26)]); n2010 <- sum(rs_pop_2010$Femi[c(16:26)])
 tab2 <- data.frame(Datasus = c(sum(rs_nasc_datasus_2000$Nasc)/n2000, sum(rs_nasc_datasus_2010$Nasc)/n2010),
 Sidra = c(sum(rs_nasc_sidra_2000$Nasc[c(1:12)])/n2000, sum(rs_nasc_sidra_2010$Nasc)/n2010))
 rownames(tab2) <- c('2000','2010')
 tab2 %>% round(3)
 rs_pop_2000
 ```
+
+Com esta estatística podemos ver a estimativa do número médio de filhos que uma mulher tem em um dados ano (analisando o seu período fértil). Para nos ajudar a visualizar os dados podemos multiplicar por 1000 a tabela, e vemos que a quantidade de filhos esperados para um conjunto de mil mulheres caiu de algo entre 63-72 para algo entre 45-50, o que mais uma vez indica queda de interesse em casais terem filhos.
 
 ## Exercício 3
 

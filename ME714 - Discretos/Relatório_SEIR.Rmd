@@ -44,6 +44,43 @@ indent: true
 \end{titlepage}
 ```
 
+## Metodologia
+
+A pandemia de COVID-19 fez com que centros de pesquisa e organizações voltassem a atenção para modelos epidemiológicos. A capacidade dos modelos em fazer previsões sobre o futuro da disseminação de vírus permite aos cientistas avaliar planos de vacinação e de isolamento que no futuro podem ser implementados através de políticas governamentais.
+
+### Modelo SEIR
+
+Neste trabalho, aplicamos o modelo SEIR para fazer a previsão da progressão da COVID-19 na XXXXX. Esse modelo é dado por 4 componentes/estados: Suscetível, Exposto, Infeccioso e Removido (SEIR), e pode ser visto na Figura 1 junto com as taxas de transição entre os estados.
+
+Suscetível, Exposto, Infeccioso e Removido são estados pelos quais um indivíduo progride na sequência. A taxa de infecção, $\beta$, controla a taxa de disseminação que representa a probabilidade de transmitir a doença entre suscetível e um indivíduo infectado. A taxa de incubação, $\sigma$, é a taxa de indivíduos expostos a se tornarem infectados (Tempo médio de incubação é dado por $1/\sigma$). A taxa de remoção, $\alpha = 1/D$, é determinada pelo tempo de duração médio, D, da infecção. 
+
+A quantidade S denota o número de indivíduos que estão suscetíveis à doença, mas não infectados. Ou seja, todas as pessoas da população que estão em risco. A quantidade E denota o número de indivíduos que foram expostos ou infectados, porém não infecciosos. A quantidade I denota o número de indivíduos que podem transmitir a doença através do contato com indivíduos suscetíveis. E a quantidade R denota o número de indivíduos que conseguiram sobreviver e adquiriram imunidade para a doença ou morreram. As equações que governam a evolução e a dinâmica do modelo SEIR podem ser descritas pelas seguintes equações diferenciais ordinárias [ ].
+
+$$ \frac{dS}{dt} = \frac{-\beta S I}{N}$$
+
+$$ \frac{dE}{dt} = \frac{-\beta S I}{N} - \sigma E$$
+
+$$\frac{dI}{dt} = \sigma E - \gamma I$$
+
+$$\frac{dR}{dt} = \gamma I$$
+
+Estudos mais aprofundados mostraram que o período médio de incubação para o Sars-Cov-2 é de ¾ dias, enquanto o período médio em que o indivíduo se mantém infeccioso é de 14 dias (ref).
+
+### Dados
+
+O conjunto de dados utilizado é proveniente de um repositório na plataforma Github e é mantido e atualizado pelo time de Ciência e Engenharia da Universidade John Hopkins, EUA ( ). 
+
+O banco de dados inclui séries temporais de rastreio do número de pessoas afetadas pela COVID-19 no mundo, incluindo:
+
+- Casos confirmados de pelo Coronavírus;
+
+- O número de pessoas que morreram enquanto estavam doentes com Coronavírus;
+
+- O número de pessoas recuperadas da doença.
+
+Como trabalhamos apenas com os dados do país XXXXX, ocorreu uma filtragem para que só esse país de interesse permanecesse no banco.
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, 
                       warning = FALSE,
@@ -58,6 +95,19 @@ options(OutDec = ",")
 ```
 
 ```{r}
+#Pacotes
 library(tidyverse)
+
+#Carregando os dados
+path = "https://raw.githubusercontent.com/datasets/covid-19/main/data/time-series-19-covid-combined.csv"
+covid = read_csv(path)
+colnames(covid) = c("Date","Country","State","Confirmed","Recovered","Deaths")
+```
+
+```{r}
+covid_country = covid %>% filter(Country == "Spain")
+
+#view(covid_country)
+ts.plot(covid_country$Confirmed[1:150])
 ```
 

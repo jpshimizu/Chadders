@@ -34,7 +34,7 @@ indent: true
 {\large Departamento de Estatística}\\[4cm]
 {\bf \huge Aplicação do modelo SEIR para previsão da têndencia da COVID-19 na XXXXXX}\\[0.9cm]
 {\large Integrantes:}\\[0.2cm]
-{\large Jadson Rodigo Silva de Oliveira -  218405}\\[0.2cm]
+{\large covidRodigo Silva de Oliveira -  218405}\\[0.2cm]
 {\large João Pedro Shimizu Rodrigues - 218793}\\[0.2cm]
 {\large Guilherme Martins de Castro Gurgel - 217249}\\[0.2cm]
 {\large Rodrigo Forti - 224191}\\[8.5cm]
@@ -43,42 +43,6 @@ indent: true
 \end{center}
 \end{titlepage}
 ```
-
-## Metodologia
-
-A pandemia de COVID-19 fez com que centros de pesquisa e organizações voltassem a atenção para modelos epidemiológicos. A capacidade dos modelos em fazer previsões sobre o futuro da disseminação de vírus permite aos cientistas avaliar planos de vacinação e de isolamento que no futuro podem ser implementados através de políticas governamentais.
-
-### Modelo SEIR
-
-Neste trabalho, aplicamos o modelo SEIR para fazer a previsão da progressão da COVID-19 na XXXXX. Esse modelo é dado por 4 componentes/estados: Suscetível, Exposto, Infeccioso e Removido (SEIR), e pode ser visto na Figura 1 junto com as taxas de transição entre os estados.
-
-Suscetível, Exposto, Infeccioso e Removido são estados pelos quais um indivíduo progride na sequência. A taxa de infecção, $\beta$, controla a taxa de disseminação que representa a probabilidade de transmitir a doença entre suscetível e um indivíduo infectado. A taxa de incubação, $\sigma$, é a taxa de indivíduos expostos a se tornarem infectados (Tempo médio de incubação é dado por $1/\sigma$). A taxa de remoção, $\alpha = 1/D$, é determinada pelo tempo de duração médio, D, da infecção. 
-
-A quantidade S denota o número de indivíduos que estão suscetíveis à doença, mas não infectados. Ou seja, todas as pessoas da população que estão em risco. A quantidade E denota o número de indivíduos que foram expostos ou infectados, porém não infecciosos. A quantidade I denota o número de indivíduos que podem transmitir a doença através do contato com indivíduos suscetíveis. E a quantidade R denota o número de indivíduos que conseguiram sobreviver e adquiriram imunidade para a doença ou morreram. As equações que governam a evolução e a dinâmica do modelo SEIR podem ser descritas pelas seguintes equações diferenciais ordinárias [ ].
-
-$$ \frac{dS}{dt} = \frac{-\beta S I}{N}$$
-
-$$ \frac{dE}{dt} = \frac{-\beta S I}{N} - \sigma E$$
-
-$$\frac{dI}{dt} = \sigma E - \gamma I$$
-
-$$\frac{dR}{dt} = \gamma I$$
-
-Estudos mais aprofundados mostraram que o período médio de incubação para o Sars-Cov-2 é de ¾ dias, enquanto o período médio em que o indivíduo se mantém infeccioso é de 14 dias (ref).
-
-### Dados
-
-O conjunto de dados utilizado é proveniente de um repositório na plataforma Github e é mantido e atualizado pelo time de Ciência e Engenharia da Universidade John Hopkins, EUA ( ). 
-
-O banco de dados inclui séries temporais de rastreio do número de pessoas afetadas pela COVID-19 no mundo, incluindo:
-
-- Casos confirmados de pelo Coronavírus;
-
-- O número de pessoas que morreram enquanto estavam doentes com Coronavírus;
-
-- O número de pessoas recuperadas da doença.
-
-Como trabalhamos apenas com os dados do país XXXXX, ocorreu uma filtragem para que só esse país de interesse permanecesse no banco.
 
 
 ```{r setup, include=FALSE}
@@ -94,20 +58,172 @@ knitr::opts_chunk$set(echo = FALSE,
 options(OutDec = ",")
 ```
 
-```{r}
+
+## Metodologia
+
+A pandemia de COVID-19 fez com que centros de pesquisa e organizações voltassem a atenção para modelos epidemiológicos. A capacidade dos modelos em fazer previsões sobre o futuro da disseminação de vírus permite aos cientistas avaliar planos de vacinação e de isolamento que no futuro podem ser implementados através de políticas governamentais.
+
+### Modelo SEIR
+
+Neste trabalho, aplicamos o modelo SEIR para fazer a previsão da progressão da COVID-19 na XXXXX. Esse modelo é dado por 4 componentes/estados: Suscetível, Exposto, Infeccioso e Removido (SEIR), e pode ser visto na Figura 1 junto com as taxas de transição entre os estados.
+
+```{r, fig.cap="Estados do modelo SEIR: Suscetível (S), Exposto (E), Infeccioso (I) e Removido (R).",out.width = "99%"}
+library(knitr)
+
+img_path <- "SEIR_diagrama.png"
+include_graphics(img_path)
+```
+
+
+Suscetível, Exposto, Infeccioso e Removido são estados pelos quais um indivíduo progride na sequência. A taxa de infecção, $\beta$, controla a taxa de disseminação que representa a probabilidade de transmitir a doença entre suscetível e um indivíduo infectado. A taxa de incubação, $\delta$, é a taxa de indivíduos expostos a se tornarem infectados (Tempo médio de incubação é dado por $1/\delta$). A taxa de remoção, $\gamma = 1/D$, é determinada pelo tempo de duração médio, D, da infecção. 
+
+A quantidade S denota o número de indivíduos que estão suscetíveis à doença, mas não infectados. Ou seja, todas as pessoas da população que estão em risco. A quantidade E denota o número de indivíduos que foram expostos ou infectados, porém não infecciosos. A quantidade I denota o número de indivíduos que podem transmitir a doença através do contato com indivíduos suscetíveis. E a quantidade R denota o número de indivíduos que conseguiram sobreviver e adquiriram imunidade para a doença ou morreram. As equações que governam a evolução e a dinâmica do modelo SEIR podem ser descritas pelas seguintes equações diferenciais ordinárias [ ].
+
+$$ \frac{dS}{dt} = \frac{-\beta S I}{N}$$
+
+$$ \frac{dE}{dt} = \frac{-\beta S I}{N} - \delta E$$
+
+$$\frac{dI}{dt} = \delta E - \gamma I$$
+
+$$\frac{dR}{dt} = \gamma I$$
+
+Estudos mais aprofundados mostraram que o período médio de incubação para o Sars-Cov-2 é de ¾ dias, enquanto o período médio em que o indivíduo se mantém infeccioso é de 14 dias (ref).
+
+## Dados
+
+O conjunto de dados utilizado é proveniente de um repositório na plataforma Github e é mantido e atualizado pelo time de Ciência e Engenharia da Universidade John Hopkins, EUA ( ). 
+
+O banco de dados inclui séries temporais de rastreio do número de pessoas afetadas pela COVID-19 no mundo, incluindo:
+
+- Casos confirmados de pelo Coronavírus;
+
+- O número de pessoas que morreram enquanto estavam doentes com Coronavírus;
+
+- O número de pessoas recuperadas da doença.
+
+Como trabalhamos apenas com os dados do país XXXXX, ocorreu uma filtragem para que só esse país de interesse permanecesse no banco.
+
+```{r Pacotes}
 #Pacotes
 library(tidyverse)
+library(deSolve)
+```
 
+
+```{r SEIR function}
+#Função SEIR
+seir_model = function (current_timepoint, state_values, parameters)
+{
+  # criando variáveis locais
+  S = state_values [1]        # suscetiveis
+  E = state_values [2]        # exposto
+  I = state_values [3]        # infeccioso
+  R = state_values [4]        # recuperado
+  
+  with ( 
+    as.list (parameters),     # nomes de variáveis dentro dos parenteses podem ser usadas 
+         {
+           # computando derivadas
+           dS = (-beta * S * I)
+           dE = (beta * S * I) - (delta * E)
+           dI = (delta * E) - (gamma * I)
+           dR = (gamma * I)
+           
+           # combinando resultados
+           results = c (dS, dE, dI, dR)
+           list (results)
+         }
+    )
+}
+```
+
+
+### Aplicação
+
+```{r Carregando dados}
 #Carregando os dados
 path = "https://raw.githubusercontent.com/datasets/covid-19/main/data/time-series-19-covid-combined.csv"
 covid = read_csv(path)
 colnames(covid) = c("Date","Country","State","Confirmed","Recovered","Deaths")
+
+italia = covid%>% filter(Country == "Italy")
+PopItaly = 60565372
 ```
+
 
 ```{r}
-covid_country = covid %>% filter(Country == "Spain")
-
-#view(covid_country)
-ts.plot(covid_country$Confirmed[1:150])
+#Parametros
+contact_rate = italia$Confirmed[nrow(italia)]/nrow(italia)	             
+# número de contatos por dia
+transmission_probability = italia$Confirmed[nrow(italia)]/PopItaly       
+# probabilidade de transmissão
+infectious_period = 12                                                     
+# período infeccioso do COVID-19, achado no Google
+latent_period = 5                                                          
+# período latente do COVID-19, achado no Google
 ```
 
+
+```{r}
+#Taxas de Trasmissão
+beta_value = contact_rate * transmission_probability
+gamma_value = 1 / infectious_period
+delta_value = 1 / latent_period
+
+#Reproductive number (Número reprodutivo)
+Ro = beta_value / gamma_value #7000
+
+#Parametros da doença
+parameter_list = c (beta = beta_value, gamma = gamma_value, delta = delta_value)
+```
+
+
+```{r}
+#Valores inventados da população
+W = 10000                                              
+# hospedeiros suscetíveis
+X = 691                                                
+# hospedeiros infecciosos
+Y = 622                                                
+# hospedeiros recuperados
+Z = 7000           
+# hospedeiros expostos
+
+#Computando população total
+N = W + X + Y + Z
+#estado inicial
+initial_values = c (S = W/N, E = X/N, I = Y/N, R = Z/N)
+#Pontos de tempo de saída
+timepoints = seq (0, 50, by=1)
+```
+
+
+```{r}
+#Aplicando o modelo SEIR
+output = lsoda (initial_values, timepoints, seir_model, parameter_list)
+```
+
+
+```{r}
+#Gráfico tudo junto
+# hospedeiros suscetíveis ao longo do tempo
+plot (S ~ time, data = output, type='b', ylim = c(0,1), col = 'blue', ylab = 'S, E, I, R', main = 'SEIR epidemic') 
+
+# permanecer no mesmo quadro
+par (new = TRUE)    
+
+# hospedeiros expostos ao longo do tempo
+plot (E ~ time, data = output, type='b', ylim = c(0,1), col = 'pink', ylab = '', axes = FALSE)
+
+# permanecer no mesmo quadro
+par (new = TRUE) 
+
+# hospedeiros infecciosos ao longo do tempo
+plot (I ~ time, data = output, type='b', ylim = c(0,1), col = 'red', ylab = '', axes = FALSE) 
+
+# permanecer no mesmo quadro
+par (new = TRUE)  
+
+# hospedeiros recuperados ao longo do tempo
+plot (R ~ time, data = output, type='b', ylim = c(0,1), col = 'green', ylab = '', axes = FALSE)
+```

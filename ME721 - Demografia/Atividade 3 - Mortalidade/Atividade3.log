@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.12) (preloaded format=pdflatex 2021.1.5)  27 MAY 2021 10:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.12) (preloaded format=pdflatex 2021.1.5)  27 MAY 2021 16:53
 entering extended mode
 **./Atividade3.tex
 (Atividade3.tex
@@ -933,32 +933,32 @@ f)
 Package pdftex.def Info: Atividade3_files/figure-latex/unnamed-chunk-9-1.pdf  u
 sed on input line 139.
 (pdftex.def)             Requested size: 455.24165pt x 227.62082pt.
-
-Overfull \hbox (54.4329pt too wide) in paragraph at lines 161--190
- [][] 
- []
-
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.191 
-       [1]
-Overfull \hbox (48.95792pt too wide) in paragraph at lines 196--225
+l.179   n
+         dx: número de indivíduos mortos na coorte; [1]
+Overfull \hbox (54.4329pt too wide) in paragraph at lines 194--223
  [][] 
  []
 
 [2 <./Atividade3_files/figure-latex/unnamed-chunk-9-1.pdf>]
-Overfull \hbox (54.4329pt too wide) in paragraph at lines 231--260
+Overfull \hbox (48.95792pt too wide) in paragraph at lines 229--258
  [][] 
  []
 
 
-Overfull \hbox (57.78366pt too wide) in paragraph at lines 266--295
+Overfull \hbox (54.4329pt too wide) in paragraph at lines 264--293
  [][] 
  []
 
-[3] [4] (Atividade3.aux) ) 
+[3]
+Overfull \hbox (57.78366pt too wide) in paragraph at lines 299--328
+ [][] 
+ []
+
+[4] (Atividade3.aux) ) 
 Here is how much of TeX's memory you used:
  16548 strings out of 479590
  256393 string characters out of 2859169
@@ -966,18 +966,18 @@ Here is how much of TeX's memory you used:
  33313 multiletter control sequences out of 15000+200000
  440328 words of font info for 102 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 81i,9n,82p,513b,368s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Users/Windows 10/AppData/Local/Programs/MiKTeX 2.
-9/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Users/Windows 10/AppData/Local/Programs/
-MiKTeX 2.9/fonts/enc/dvips/lm/lm-rm.enc}{C:/Users/Windows 10/AppData/Local/Prog
-rams/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Users/Windows 10/AppData/Local/
-Programs/MiKTeX 2.9/fonts/type1/public/lm/lmmi10.pfb><C:/Users/Windows 10/AppDa
-ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmmi8.pfb><C:/Users/Windows 
-10/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmr10.pfb><C:/Users/
-Windows 10/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><
-C:/Users/Windows 10/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/urw/times/utm
-r8a.pfb>
-Output written on Atividade3.pdf (5 pages, 89506 bytes).
+ 81i,9n,82p,513b,413s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Users/Windows 10/AppData/Local/Programs/MiKTeX 2.9/fo
+nts/enc/dvips/lm/lm-mathit.enc}{C:/Users/Windows 10/AppData/Local/Programs/MiKT
+eX 2.9/fonts/enc/dvips/lm/lm-rm.enc}{C:/Users/Windows 10/AppData/Local/Programs
+/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Users/Windows 10/AppData/Local/Prog
+rams/MiKTeX 2.9/fonts/type1/public/lm/lmmi10.pfb><C:/Users/Windows 10/AppData/L
+ocal/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmmi8.pfb><C:/Users/Windows 10/A
+ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmr10.pfb><C:/Users/Wind
+ows 10/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/U
+sers/Windows 10/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.
+pfb>
+Output written on Atividade3.pdf (5 pages, 89921 bytes).
 PDF statistics:
  90 PDF objects out of 1000 (max. 8388607)
  20 named destinations out of 1000 (max. 500000)

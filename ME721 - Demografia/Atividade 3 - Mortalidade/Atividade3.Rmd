@@ -1,29 +1,27 @@
 ---
-output: 
+output:
+  html_document:
+    df_print: paged
   pdf_document:
     fig_crop: no
-#bibliography: "referencias.bib"
-#nocite: '@*'
-#link-citations: true
-#colorlinks: false
 fontsize: 11pt
 documentclass: article
-geometry: 
- - a4paper
- - textwidth=16cm
- - textheight=21cm
+geometry:
+- a4paper
+- textwidth=16cm
+- textheight=21cm
 header-includes:
-  - \usepackage[brazil, english, portuguese]{babel}
-  - \usepackage[utf8]{inputenc}
-  - \usepackage[T1]{fontenc}
-  - \usepackage[fixlanguage]{babelbib}
-  - \usepackage{times}
-  - \usepackage{caption} 
-  - \captionsetup[table]{skip=10pt}
-  - \usepackage{amsmath}
-  - \usepackage{float}
-  - \usepackage{indentfirst}
-indent: true
+- \usepackage[brazil, english, portuguese]{babel}
+- \usepackage[utf8]{inputenc}
+- \usepackage[T1]{fontenc}
+- \usepackage[fixlanguage]{babelbib}
+- \usepackage{times}
+- \usepackage{caption}
+- \captionsetup[table]{skip=10pt}
+- \usepackage{amsmath}
+- \usepackage{float}
+- \usepackage{indentfirst}
+indent: yes
 ---
 
 ```{=tex}
@@ -83,8 +81,110 @@ colnames(mg_morte_2010) = nomes
 
 ## Questão 1
 
+A Taxa Bruta de Mortalidade (TBM) é o número total de óbitos, por mil habitantes, em determinado espaço geográfico, no ano considerado. Ela expressa a frequência anual de mortes e é condicionada por fatores socioeconômicos. Fórmula: TBM = $$1000.\frac{Óbitos}{População}$$
+
+Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 1980:
+
+```{r taxa brutalidade 1980, echo=FALSE}
+TBM1980 = ((sum(mg_morte_1980$total))/(sum(mg_pop_1980$total)))*1000
+TBM1980
+```
+
+Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 2010:
+
+```{r taxa brutalidade 2010, echo=FALSE}
+TBM2010 = ((sum(mg_morte_2010$total))/(sum(mg_pop_2010$total)))*1000
+TBM2010
+```
+
+Observa-se uma diminuição da Taxa Bruta de Mortalidade (TBM) de 1980 para 2010, um motivo disso foram os avanços no campo da medicina que permitiram que a sociedade pudesse ter acesso a vacinas, medicamentos e maiores cuidados com a saúde. Outros motivos foram a melhoria do saneamento básico e a diminuição da miséria. 
+
 ## Questão 2
 
 ## Questão 3
 
+A Taxa Específica de Mortalidade expressa a frequência anual de mortes por faixa etário e sexo e é condicionada por fatores socioeconômicos. Fórmula: TEM = $$\frac{ÓbitosPorSexo_EFaixaEtária}{PopulaçãoPorSexo_EFaixaEtária}$$
+
+Taxas Específicas de Mortalidade (TEM) para homens de Minas Gerais em 1980, arredondado para 4 digitos, para as faixas etárias: Menor 1 ano, 1 a 4 anos, 5 a 9 anos, 10 a 14 anos, 15 a 19 anos, 20 a 29 anos, 30 a 39 anos, 40 a 49 anos, 50 a 59 anos, 60 a 69 anos, 70 a 79 anos, 80 anos e mais
+
+```{r, echo=FALSE}
+TEM_H_1980 = (mg_morte_1980$masc)/(mg_pop_1980$masc)
+data.frame(TEM = round(TEM_H_1980,4), Faixa = mg_morte_1980$faixa)
+```
+
+Taxas Específicas de Mortalidade (TEM) para mulheres de Minas Gerais em 1980, arredondado para 4 digitos, para as faixas etárias: Menor 1 ano, 1 a 4 anos, 5 a 9 anos, 10 a 14 anos, 15 a 19 anos, 20 a 29 anos, 30 a 39 anos, 40 a 49 anos, 50 a 59 anos, 60 a 69 anos, 70 a 79 anos, 80 anos e mais
+
+```{r, echo=FALSE}
+TEM_M_1980 = (mg_morte_1980$femi)/(mg_pop_1980$femi)
+data.frame(TEM = round(TEM_M_1980,4), Faixa = mg_morte_1980$faixa)
+```
+
+Taxas Específicas de Mortalidade (TEM) para homens de Minas Gerais em 2010, arredondado para 4 digitos, para as faixas etárias: Menor 1 ano, 1 a 4 anos, 5 a 9 anos, 10 a 14 anos, 15 a 19 anos, 20 a 29 anos, 30 a 39 anos, 40 a 49 anos, 50 a 59 anos, 60 a 69 anos, 70 a 79 anos, 80 anos e mais
+
+```{r, echo=FALSE}
+TEM_H_2010 = (mg_morte_2010$masc)/(mg_pop_2010$masc)
+data.frame(TEM = round(TEM_H_2010,4), Faixa = mg_morte_1980$faixa)
+```
+
+Taxas Específicas de Mortalidade (TEM) para mulheres de Minas Gerais em 2010, arredondado para 4 digitos, para as faixas etárias: Menor 1 ano, 1 a 4 anos, 5 a 9 anos, 10 a 14 anos, 15 a 19 anos, 20 a 29 anos, 30 a 39 anos, 40 a 49 anos, 50 a 59 anos, 60 a 69 anos, 70 a 79 anos, 80 anos e mais
+
+```{r, echo=FALSE}
+TEM_M_2010 = (mg_morte_2010$femi)/(mg_pop_2010$femi)
+data.frame(TEM = round(TEM_M_2010,4), Faixa = mg_morte_1980$faixa)
+```
+
+
+
+Graficos com as taxas especificas das duas fontes de ambos os anos, azul indica homem e vermelho indica mulher:
+
+
+```{r, include=FALSE}
+f = c(0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80)
+G1980 = data.frame(TEM_Homem = round(TEM_H_1980,4), TEM_Mulher = round(TEM_M_1980,4), Idade = f)
+G2010 = data.frame(TEM_Homem = round(TEM_H_2010,4), TEM_Mulher = round(TEM_M_2010,4), Idade = f)
+```
+
+
+```{r, echo=FALSE}
+ggplot(data = G1980) + geom_line(aes(x = Idade, y = TEM_Homem), col = "blue") + geom_point(aes(x = Idade, y = TEM_Homem), col = "blue") + geom_line(aes(x = Idade, y = TEM_Mulher), col = "red") + geom_point(aes(x = Idade, y = TEM_Mulher), col = "red") + ggtitle("Grafico com as taxas especificas (TES) de ambos os sexos em 1980") + labs(y="TEM")
+```
+
+
+```{r, echo=FALSE}
+ggplot(data = G2010) + geom_line(aes(x = Idade, y = TEM_Homem), col = "blue") + geom_point(aes(x = Idade, y = TEM_Homem), col = "blue") + geom_line(aes(x = Idade, y = TEM_Mulher), col = "red") + geom_point(aes(x = Idade, y = TEM_Mulher), col = "red") + ggtitle("Grafico com as taxas especificas (TES) de ambos os sexos em 2010") + labs(y="TEM")
+```
+
+Observa-se que em geral, os homens possuem as Taxas Especificas de Mortalidade maiores do que as mulheres. Uma razão para esse fenômeno é que os homens, em geral, fazem diagnóstico tardio de doenças graves, não seguem o tratamento recomendado, estão mais expostos aos acidentes de trabalho e trânsito, utilizam álcool e drogas em maior quantidade, envolvem-se mais em situações de violência do que as mulheres e não praticam atividade física com regularidade como as mulheres. Outro motivo é que a saúde pública prioriza a saúde da criança e da mulher. 
+
+
 ## Questão 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

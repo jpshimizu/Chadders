@@ -171,13 +171,322 @@ Observa-se que em geral, os homens possuem as Taxas Especificas de Mortalidade m
 
 ## Questão 4
 
+```{r tabela de vida masc 1980}
+options(scipen=999)
+##Uma matrix inicial para determinar as dimens�es da tabela
+lifetable<-matrix(c(1),12,13) # Extens�o da tabela � 80+
+
+##Criando os intervalos et�rios
+lifetable[,1]<-c(1,4,5,5,5,rep(10,7))
+
+## Entrando com as mortes no per�odo
+lifetable[,2]<-mg_morte_1980$masc
+
+## Entrando com as pessoas-ano
+lifetable[,3]<-mg_pop_1980$masc
+
+##Estimando as taxas espec�ficas de mortalidade  nMx
+lifetable[,4]<-lifetable[,2]/lifetable[,3]
+
+## Estimando os nax
+for(i in 3:11){lifetable[i,5]<-2.5}
+
+## ax das primeiras idades para ambos os sexos
+
+##Para a idade de 0 a 1 ano - 1a0
+lifetable[1,5]<-.07+1.7*lifetable[1,4]
+
+##Para a idade de 1 a 4 anos completos - 4a1
+lifetable[2,5]<-1.6
+
+##Para o �ltimo grupo de idade da t�bua. No nosso caso 80+
+lifetable[12,5]<-1/lifetable[12,4] ##inverso da �ltima taxa
+
+## Estimando as probabilidades de morte nqx IMPORTANTE. Ver f�rmula tr�s
+for (i in 1:11){lifetable[i,6]<-(lifetable[i,1]*lifetable[i,4])/
+  ((1)+((lifetable[i,1]-lifetable[i,5])*lifetable[i,4]))}
+
+##A probabilidade de morte para �ltima idade da t�bua
+lifetable[12,6]<-1.000000
+
+##Estimando as probabilidades de sobreviv�ncia npx=1-nqx
+lifetable[,7]<-(1-lifetable[,6])
+
+##Criando uma coorte hipot�tica e aplicando as probabilidades de sobreviv�ncia para gerar o lx
+lifetable[1,8]<-100000 #estabelecendo a raiz da t�bua
+
+##para os demais grupos de idade l(x+n)=lx.p(x)
+for (i in 2:12){lifetable[i,8]<-(lifetable[i-1,7]*lifetable[i-1,8])}
+
+##Estimando o n�mero de mortes de tabela ndx=l(x)-l(x+n)
+for (i in 1:11){lifetable[i,9]<-lifetable[i,8]-lifetable[i+1,8]}
+
+##Para o �ltimo grupo de idade lx(aberto) = dx(aberto)
+lifetable[12,9]<-lifetable[12,8]
+
+## Estimando o pessoas-ano vivido da tabela de vida Lx
+##Todos que viveram at� o fim do intervalo + aqueles que viveram certo tempo e morreram antes de completar a �ltima idade do intervalo nLx = n .l(x+n) + nax.ndx
+for (i in 1:11){lifetable[i,10]<-((lifetable[i,1]*lifetable[i+1,8])+(lifetable[i,5]*lifetable[i,9]))}
+
+##Para o �ltimo grupo de idade, mortes/taxa m(aberto) = Lx do grupo de idade aberto
+lifetable[12,10]<-lifetable[12,9]/lifetable[12,4]
+
+##Estimando as taxas de mortalidade da tabela nmx = mortes da tabela/pessoas-anos vivido
+lifetable[,11]<-lifetable[,9]/lifetable[,10]
+
+##Estimando o Tx - pessoas-ano acima da idade x
+lifetable[,12]<-(rev(cumsum(rev(lifetable[,10]))))
+
+##Estimando a esperan�a de vida = Tx/lx
+lifetable[,13]<-lifetable[,12]/lifetable[,8]
+
+##colocando o nome das linhas e colunas
+rownames(lifetable)<-c("0", "1","5","10","15","20","30","40","50","60","70","80+")
+colnames(lifetable)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
+
+##Tabela de vida completa
+lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tabela de vida para indivíduos do sexo masculino no Estado de Minas Gerais, 1980.") %>%
+  kable_styling(position = "center",latex_options = "HOLD_position") %>%
+  kable_styling(full_width = F)
+```
+
+```{r tabela de vida femi 1980}
+options(scipen=999)
+##Uma matrix inicial para determinar as dimens�es da tabela
+lifetable<-matrix(c(1),12,13) # Extens�o da tabela � 80+
+
+##Criando os intervalos et�rios
+lifetable[,1]<-c(1,4,5,5,5,rep(10,7))
+
+## Entrando com as mortes no per�odo
+lifetable[,2]<-mg_morte_1980$femi
+
+## Entrando com as pessoas-ano
+lifetable[,3]<-mg_pop_1980$femi
+
+##Estimando as taxas espec�ficas de mortalidade  nMx
+lifetable[,4]<-lifetable[,2]/lifetable[,3]
+
+## Estimando os nax
+for(i in 3:11){lifetable[i,5]<-2.5}
+
+## ax das primeiras idades para ambos os sexos
+
+##Para a idade de 0 a 1 ano - 1a0
+lifetable[1,5]<-.07+1.7*lifetable[1,4]
+
+##Para a idade de 1 a 4 anos completos - 4a1
+lifetable[2,5]<-1.6
+
+##Para o �ltimo grupo de idade da t�bua. No nosso caso 80+
+lifetable[12,5]<-1/lifetable[12,4] ##inverso da �ltima taxa
+
+## Estimando as probabilidades de morte nqx IMPORTANTE. Ver f�rmula tr�s
+for (i in 1:11){lifetable[i,6]<-(lifetable[i,1]*lifetable[i,4])/
+  ((1)+((lifetable[i,1]-lifetable[i,5])*lifetable[i,4]))}
+
+##A probabilidade de morte para �ltima idade da t�bua
+lifetable[12,6]<-1.000000
+
+##Estimando as probabilidades de sobreviv�ncia npx=1-nqx
+lifetable[,7]<-(1-lifetable[,6])
+
+##Criando uma coorte hipot�tica e aplicando as probabilidades de sobreviv�ncia para gerar o lx
+lifetable[1,8]<-100000 #estabelecendo a raiz da t�bua
+
+##para os demais grupos de idade l(x+n)=lx.p(x)
+for (i in 2:12){lifetable[i,8]<-(lifetable[i-1,7]*lifetable[i-1,8])}
+
+##Estimando o n�mero de mortes de tabela ndx=l(x)-l(x+n)
+for (i in 1:11){lifetable[i,9]<-lifetable[i,8]-lifetable[i+1,8]}
+
+##Para o �ltimo grupo de idade lx(aberto) = dx(aberto)
+lifetable[12,9]<-lifetable[12,8]
+
+## Estimando o pessoas-ano vivido da tabela de vida Lx
+##Todos que viveram at� o fim do intervalo + aqueles que viveram certo tempo e morreram antes de completar a �ltima idade do intervalo nLx = n .l(x+n) + nax.ndx
+for (i in 1:11){lifetable[i,10]<-((lifetable[i,1]*lifetable[i+1,8])+(lifetable[i,5]*lifetable[i,9]))}
+
+##Para o �ltimo grupo de idade, mortes/taxa m(aberto) = Lx do grupo de idade aberto
+lifetable[12,10]<-lifetable[12,9]/lifetable[12,4]
+
+##Estimando as taxas de mortalidade da tabela nmx = mortes da tabela/pessoas-anos vivido
+lifetable[,11]<-lifetable[,9]/lifetable[,10]
+
+##Estimando o Tx - pessoas-ano acima da idade x
+lifetable[,12]<-(rev(cumsum(rev(lifetable[,10]))))
+
+##Estimando a esperan�a de vida = Tx/lx
+lifetable[,13]<-lifetable[,12]/lifetable[,8]
+
+##colocando o nome das linhas e colunas
+rownames(lifetable)<-c("0", "1","5","10","15","20","30","40","50","60","70","80+")
+colnames(lifetable)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
+
+##Tabela de vida completa
+lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tabela de vida para indivíduos do sexo feminino no Estado de Minas Gerais, 1980.") %>%
+  kable_styling(position = "center",latex_options = "HOLD_position") %>%
+  kable_styling(full_width = F)
+```
 
 
+```{r tabela de vida masc 2010}
+options(scipen=999)
+##Uma matrix inicial para determinar as dimens�es da tabela
+lifetable<-matrix(c(1),12,13) # Extens�o da tabela � 80+
 
+##Criando os intervalos et�rios
+lifetable[,1]<-c(1,4,5,5,5,rep(10,7))
 
+## Entrando com as mortes no per�odo
+lifetable[,2]<-mg_morte_2010$masc
 
+## Entrando com as pessoas-ano
+lifetable[,3]<-mg_pop_2010$masc
 
+##Estimando as taxas espec�ficas de mortalidade  nMx
+lifetable[,4]<-lifetable[,2]/lifetable[,3]
 
+## Estimando os nax
+for(i in 3:11){lifetable[i,5]<-2.5}
+
+## ax das primeiras idades para ambos os sexos
+
+##Para a idade de 0 a 1 ano - 1a0
+lifetable[1,5]<-.07+1.7*lifetable[1,4]
+
+##Para a idade de 1 a 4 anos completos - 4a1
+lifetable[2,5]<-1.6
+
+##Para o �ltimo grupo de idade da t�bua. No nosso caso 80+
+lifetable[12,5]<-1/lifetable[12,4] ##inverso da �ltima taxa
+
+## Estimando as probabilidades de morte nqx IMPORTANTE. Ver f�rmula tr�s
+for (i in 1:11){lifetable[i,6]<-(lifetable[i,1]*lifetable[i,4])/
+  ((1)+((lifetable[i,1]-lifetable[i,5])*lifetable[i,4]))}
+
+##A probabilidade de morte para �ltima idade da t�bua
+lifetable[12,6]<-1.000000
+
+##Estimando as probabilidades de sobreviv�ncia npx=1-nqx
+lifetable[,7]<-(1-lifetable[,6])
+
+##Criando uma coorte hipot�tica e aplicando as probabilidades de sobreviv�ncia para gerar o lx
+lifetable[1,8]<-100000 #estabelecendo a raiz da t�bua
+
+##para os demais grupos de idade l(x+n)=lx.p(x)
+for (i in 2:12){lifetable[i,8]<-(lifetable[i-1,7]*lifetable[i-1,8])}
+
+##Estimando o n�mero de mortes de tabela ndx=l(x)-l(x+n)
+for (i in 1:11){lifetable[i,9]<-lifetable[i,8]-lifetable[i+1,8]}
+
+##Para o �ltimo grupo de idade lx(aberto) = dx(aberto)
+lifetable[12,9]<-lifetable[12,8]
+
+## Estimando o pessoas-ano vivido da tabela de vida Lx
+##Todos que viveram at� o fim do intervalo + aqueles que viveram certo tempo e morreram antes de completar a �ltima idade do intervalo nLx = n .l(x+n) + nax.ndx
+for (i in 1:11){lifetable[i,10]<-((lifetable[i,1]*lifetable[i+1,8])+(lifetable[i,5]*lifetable[i,9]))}
+
+##Para o �ltimo grupo de idade, mortes/taxa m(aberto) = Lx do grupo de idade aberto
+lifetable[12,10]<-lifetable[12,9]/lifetable[12,4]
+
+##Estimando as taxas de mortalidade da tabela nmx = mortes da tabela/pessoas-anos vivido
+lifetable[,11]<-lifetable[,9]/lifetable[,10]
+
+##Estimando o Tx - pessoas-ano acima da idade x
+lifetable[,12]<-(rev(cumsum(rev(lifetable[,10]))))
+
+##Estimando a esperan�a de vida = Tx/lx
+lifetable[,13]<-lifetable[,12]/lifetable[,8]
+
+##colocando o nome das linhas e colunas
+rownames(lifetable)<-c("0", "1","5","10","15","20","30","40","50","60","70","80+")
+colnames(lifetable)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
+
+##Tabela de vida completa
+lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tabela de vida para indivíduos do sexo masculino no Estado de Minas Gerais, 2010.") %>%
+  kable_styling(position = "center",latex_options = "HOLD_position") %>%
+  kable_styling(full_width = F)
+```
+
+```{r tabela de vida femi 2010}
+options(scipen=999)
+##Uma matrix inicial para determinar as dimens�es da tabela
+lifetable<-matrix(c(1),12,13) # Extens�o da tabela � 80+
+
+##Criando os intervalos et�rios
+lifetable[,1]<-c(1,4,5,5,5,rep(10,7))
+
+## Entrando com as mortes no per�odo
+lifetable[,2]<-mg_morte_2010$femi
+
+## Entrando com as pessoas-ano
+lifetable[,3]<-mg_pop_2010$femi
+
+##Estimando as taxas espec�ficas de mortalidade  nMx
+lifetable[,4]<-lifetable[,2]/lifetable[,3]
+
+## Estimando os nax
+for(i in 3:11){lifetable[i,5]<-2.5}
+
+## ax das primeiras idades para ambos os sexos
+
+##Para a idade de 0 a 1 ano - 1a0
+lifetable[1,5]<-.07+1.7*lifetable[1,4]
+
+##Para a idade de 1 a 4 anos completos - 4a1
+lifetable[2,5]<-1.6
+
+##Para o �ltimo grupo de idade da t�bua. No nosso caso 80+
+lifetable[12,5]<-1/lifetable[12,4] ##inverso da �ltima taxa
+
+## Estimando as probabilidades de morte nqx IMPORTANTE. Ver f�rmula tr�s
+for (i in 1:11){lifetable[i,6]<-(lifetable[i,1]*lifetable[i,4])/
+  ((1)+((lifetable[i,1]-lifetable[i,5])*lifetable[i,4]))}
+
+##A probabilidade de morte para �ltima idade da t�bua
+lifetable[12,6]<-1.000000
+
+##Estimando as probabilidades de sobreviv�ncia npx=1-nqx
+lifetable[,7]<-(1-lifetable[,6])
+
+##Criando uma coorte hipot�tica e aplicando as probabilidades de sobreviv�ncia para gerar o lx
+lifetable[1,8]<-100000 #estabelecendo a raiz da t�bua
+
+##para os demais grupos de idade l(x+n)=lx.p(x)
+for (i in 2:12){lifetable[i,8]<-(lifetable[i-1,7]*lifetable[i-1,8])}
+
+##Estimando o n�mero de mortes de tabela ndx=l(x)-l(x+n)
+for (i in 1:11){lifetable[i,9]<-lifetable[i,8]-lifetable[i+1,8]}
+
+##Para o �ltimo grupo de idade lx(aberto) = dx(aberto)
+lifetable[12,9]<-lifetable[12,8]
+
+## Estimando o pessoas-ano vivido da tabela de vida Lx
+##Todos que viveram at� o fim do intervalo + aqueles que viveram certo tempo e morreram antes de completar a �ltima idade do intervalo nLx = n .l(x+n) + nax.ndx
+for (i in 1:11){lifetable[i,10]<-((lifetable[i,1]*lifetable[i+1,8])+(lifetable[i,5]*lifetable[i,9]))}
+
+##Para o �ltimo grupo de idade, mortes/taxa m(aberto) = Lx do grupo de idade aberto
+lifetable[12,10]<-lifetable[12,9]/lifetable[12,4]
+
+##Estimando as taxas de mortalidade da tabela nmx = mortes da tabela/pessoas-anos vivido
+lifetable[,11]<-lifetable[,9]/lifetable[,10]
+
+##Estimando o Tx - pessoas-ano acima da idade x
+lifetable[,12]<-(rev(cumsum(rev(lifetable[,10]))))
+
+##Estimando a esperan�a de vida = Tx/lx
+lifetable[,13]<-lifetable[,12]/lifetable[,8]
+
+##colocando o nome das linhas e colunas
+rownames(lifetable)<-c("0", "1","5","10","15","20","30","40","50","60","70","80+")
+colnames(lifetable)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
+
+##Tabela de vida completa
+lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tabela de vida para indivíduos do sexo feminino no Estado de Minas Gerais, 2010.") %>%
+  kable_styling(position = "center",latex_options = "HOLD_position") %>%
+  kable_styling(full_width = F)
+```
 
 
 

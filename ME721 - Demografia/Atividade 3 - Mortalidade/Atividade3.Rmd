@@ -83,18 +83,18 @@ colnames(mg_morte_2010) = nomes
 
 A Taxa Bruta de Mortalidade (TBM) é o número total de óbitos, por mil habitantes, em determinado espaço geográfico, no ano considerado. Ela expressa a frequência anual de mortes e é condicionada por fatores socioeconômicos. Fórmula: TBM = $$1000.\frac{Óbitos}{População}$$
 
-Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 1980:
+Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 1980: **TBM** = 7,002479
 
-```{r taxa brutalidade 1980, echo=FALSE}
+```{r taxa brutalidade 1980}
 TBM1980 = ((sum(mg_morte_1980$total))/(sum(mg_pop_1980$total)))*1000
-TBM1980
+#TBM1980
 ```
 
-Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 2010:
+Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 2010: **TBM** = 6,158747
 
-```{r taxa brutalidade 2010, echo=FALSE}
+```{r taxa brutalidade 2010}
 TBM2010 = ((sum(mg_morte_2010$total))/(sum(mg_pop_2010$total)))*1000
-TBM2010
+#TBM2010
 ```
 
 Observa-se uma diminuição da Taxa Bruta de Mortalidade (TBM) de 1980 para 2010, um motivo disso foram os avanços no campo da medicina que permitiram que a sociedade pudesse ter acesso a vacinas, medicamentos e maiores cuidados com a saúde. Outros motivos foram a melhoria do saneamento básico e a diminuição da miséria. 

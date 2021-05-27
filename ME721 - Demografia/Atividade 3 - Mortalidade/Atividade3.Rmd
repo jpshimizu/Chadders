@@ -1,9 +1,9 @@
 ---
 output:
-  html_document:
-    df_print: paged
   pdf_document:
     fig_crop: no
+  html_document:
+    df_print: paged
 fontsize: 11pt
 documentclass: article
 geometry:
@@ -81,16 +81,16 @@ colnames(mg_morte_2010) = nomes
 
 ## Questão 1
 
-A Taxa Bruta de Mortalidade (TBM) é o número total de óbitos, por mil habitantes, em determinado espaço geográfico, no ano considerado. Ela expressa a frequência anual de mortes e é condicionada por fatores socioeconômicos. Fórmula: TBM = $$1000.\frac{Óbitos}{População}$$
+A Taxa Bruta de Mortalidade (TBM) é o número total de óbitos, por mil habitantes, em determinado espaço geográfico, no ano considerado. Ela expressa a frequência anual de mortes e é condicionada por fatores socioeconômicos. A fórmula é dada por: $$ TBM = 1000.\frac{Óbitos}{População}$$
 
-Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 1980: **TBM** = 7,002479
+- Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 1980: **TBM** = 7,002479
 
 ```{r taxa brutalidade 1980}
 TBM1980 = ((sum(mg_morte_1980$total))/(sum(mg_pop_1980$total)))*1000
 #TBM1980
 ```
 
-Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 2010: **TBM** = 6,158747
+- Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 2010: **TBM** = 6,158747
 
 ```{r taxa brutalidade 2010}
 TBM2010 = ((sum(mg_morte_2010$total))/(sum(mg_pop_2010$total)))*1000
@@ -103,39 +103,32 @@ Observa-se uma diminuição da Taxa Bruta de Mortalidade (TBM) de 1980 para 2010
 
 ## Questão 3
 
-A Taxa Específica de Mortalidade expressa a frequência anual de mortes por faixa etário e sexo e é condicionada por fatores socioeconômicos. Fórmula: TEM = $$\frac{ÓbitosPorSexo_EFaixaEtária}{PopulaçãoPorSexo_EFaixaEtária}$$
-
-Taxas Específicas de Mortalidade (TEM) para homens de Minas Gerais em 1980, arredondado para 4 digitos, para as faixas etárias: Menor 1 ano, 1 a 4 anos, 5 a 9 anos, 10 a 14 anos, 15 a 19 anos, 20 a 29 anos, 30 a 39 anos, 40 a 49 anos, 50 a 59 anos, 60 a 69 anos, 70 a 79 anos, 80 anos e mais
+A Taxa Específica de Mortalidade (TEM) expressa a frequência anual de mortes por faixa etário e sexo e é condicionada por fatores socioeconômicos. A fórmula é dada por:
+$$TEM = \frac{ÓbitosPorSexo_EFaixaEtária}{PopulaçãoPorSexo_EFaixaEtária}$$
 
 ```{r, echo=FALSE}
 TEM_H_1980 = (mg_morte_1980$masc)/(mg_pop_1980$masc)
-data.frame(TEM = round(TEM_H_1980,4), Faixa = mg_morte_1980$faixa)
+#data.frame(TEM = round(TEM_H_1980,4), Faixa = mg_morte_1980$faixa)
 ```
-
-Taxas Específicas de Mortalidade (TEM) para mulheres de Minas Gerais em 1980, arredondado para 4 digitos, para as faixas etárias: Menor 1 ano, 1 a 4 anos, 5 a 9 anos, 10 a 14 anos, 15 a 19 anos, 20 a 29 anos, 30 a 39 anos, 40 a 49 anos, 50 a 59 anos, 60 a 69 anos, 70 a 79 anos, 80 anos e mais
 
 ```{r, echo=FALSE}
 TEM_M_1980 = (mg_morte_1980$femi)/(mg_pop_1980$femi)
-data.frame(TEM = round(TEM_M_1980,4), Faixa = mg_morte_1980$faixa)
+#data.frame(TEM = round(TEM_M_1980,4), Faixa = mg_morte_1980$faixa)
 ```
-
-Taxas Específicas de Mortalidade (TEM) para homens de Minas Gerais em 2010, arredondado para 4 digitos, para as faixas etárias: Menor 1 ano, 1 a 4 anos, 5 a 9 anos, 10 a 14 anos, 15 a 19 anos, 20 a 29 anos, 30 a 39 anos, 40 a 49 anos, 50 a 59 anos, 60 a 69 anos, 70 a 79 anos, 80 anos e mais
 
 ```{r, echo=FALSE}
 TEM_H_2010 = (mg_morte_2010$masc)/(mg_pop_2010$masc)
-data.frame(TEM = round(TEM_H_2010,4), Faixa = mg_morte_1980$faixa)
+#data.frame(TEM = round(TEM_H_2010,4), Faixa = mg_morte_1980$faixa)
 ```
-
-Taxas Específicas de Mortalidade (TEM) para mulheres de Minas Gerais em 2010, arredondado para 4 digitos, para as faixas etárias: Menor 1 ano, 1 a 4 anos, 5 a 9 anos, 10 a 14 anos, 15 a 19 anos, 20 a 29 anos, 30 a 39 anos, 40 a 49 anos, 50 a 59 anos, 60 a 69 anos, 70 a 79 anos, 80 anos e mais
 
 ```{r, echo=FALSE}
 TEM_M_2010 = (mg_morte_2010$femi)/(mg_pop_2010$femi)
-data.frame(TEM = round(TEM_M_2010,4), Faixa = mg_morte_1980$faixa)
+#data.frame(TEM = round(TEM_M_2010,4), Faixa = mg_morte_1980$faixa)
 ```
 
 
 
-Graficos com as taxas especificas das duas fontes de ambos os anos, azul indica homem e vermelho indica mulher:
+A melhor forma para vermos a TEM é através dos gráficos da Figura 1.
 
 
 ```{r, include=FALSE}
@@ -146,13 +139,32 @@ G2010 = data.frame(TEM_Homem = round(TEM_H_2010,4), TEM_Mulher = round(TEM_M_201
 
 
 ```{r, echo=FALSE}
-ggplot(data = G1980) + geom_line(aes(x = Idade, y = TEM_Homem), col = "blue") + geom_point(aes(x = Idade, y = TEM_Homem), col = "blue") + geom_line(aes(x = Idade, y = TEM_Mulher), col = "red") + geom_point(aes(x = Idade, y = TEM_Mulher), col = "red") + ggtitle("Grafico com as taxas especificas (TES) de ambos os sexos em 1980") + labs(y="TEM")
+plot31 = ggplot(data = G1980) + geom_line(aes(x = Idade, y = TEM_Homem), col = "blue") +
+  geom_point(aes(x = Idade, y = TEM_Homem), col = "blue") +
+  geom_line(aes(x = Idade, y = TEM_Mulher), col = "red") +
+  geom_point(aes(x = Idade, y = TEM_Mulher), col = "red") +
+  ggtitle("Taxa específica de mortalidade, MG 1980") +
+  labs(y="TEM")+
+  ylim(c(0,0.16))+
+  theme_bw()
 ```
 
 
 ```{r, echo=FALSE}
-ggplot(data = G2010) + geom_line(aes(x = Idade, y = TEM_Homem), col = "blue") + geom_point(aes(x = Idade, y = TEM_Homem), col = "blue") + geom_line(aes(x = Idade, y = TEM_Mulher), col = "red") + geom_point(aes(x = Idade, y = TEM_Mulher), col = "red") + ggtitle("Grafico com as taxas especificas (TES) de ambos os sexos em 2010") + labs(y="TEM")
+plot32 = ggplot(data = G2010) + geom_line(aes(x = Idade, y = TEM_Homem), col = "blue") +
+  geom_point(aes(x = Idade, y = TEM_Homem), col = "blue") +
+  geom_line(aes(x = Idade, y = TEM_Mulher), col = "red") +
+  geom_point(aes(x = Idade, y = TEM_Mulher), col = "red") +
+  ggtitle("Taxa específica de mortalidade, MG 2010") +
+  labs(y="TEM")+
+  ylim(c(0,0.16))+
+  theme_bw()
 ```
+
+```{r, fig.width= 8, fig.cap = "Taxas específicas de mortalidade para o Estado de Minas Gerais em 1980 e 2010. A cor azul representa o sexo masculino e a cor vermelha, o sexo feminino."}
+plot31 + plot32
+```
+
 
 Observa-se que em geral, os homens possuem as Taxas Especificas de Mortalidade maiores do que as mulheres. Uma razão para esse fenômeno é que os homens, em geral, fazem diagnóstico tardio de doenças graves, não seguem o tratamento recomendado, estão mais expostos aos acidentes de trabalho e trânsito, utilizam álcool e drogas em maior quantidade, envolvem-se mais em situações de violência do que as mulheres e não praticam atividade física com regularidade como as mulheres. Outro motivo é que a saúde pública prioriza a saúde da criança e da mulher. 
 

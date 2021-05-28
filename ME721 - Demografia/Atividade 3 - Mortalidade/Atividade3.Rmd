@@ -171,9 +171,9 @@ Observa-se que em geral, os homens possuem as Taxas Especificas de Mortalidade m
 
 ## Questão 4
 
-Elementos da tabela de vida:
+Elementos das Tábuas de Vida das Tabelas 1, 2, 3 e 4:
 
- - n: comprimento da faixa etária em anos;
+ - n: amplitude do intervalo do grupo etário;
  - nDx: número de indivíduos mortos;
  - nNx: número de indivíduos vivos na população;
  - nMx: taxa específica de mortalidade;
@@ -184,7 +184,7 @@ Elementos da tabela de vida:
  - ndx: número de indivíduos mortos na coorte;
  - nLx: número de indivíduos vivos na coorte;
  - nmx: taxa específica de mortalidade na coorte;
- - Tx: pessoas-ano acima da faixa etária
+ - Tx: Total de anos vividos pelo grupo etário a partir da idade;
  - ex: esperança de vida.
 
 ```{r tabela de vida masc 1980}
@@ -261,7 +261,7 @@ rownames(lifetable)<-c("0", "1","5","10","15","20","30","40","50","60","70","80+
 colnames(lifetable)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tabela de vida para indivíduos do sexo masculino no Estado de Minas Gerais, 1980.") %>%
+lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida para indivíduos do sexo masculino no Estado de Minas Gerais, 1980.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 ```
@@ -340,7 +340,7 @@ rownames(lifetable)<-c("0", "1","5","10","15","20","30","40","50","60","70","80+
 colnames(lifetable)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tabela de vida para indivíduos do sexo feminino no Estado de Minas Gerais, 1980.") %>%
+lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida para indivíduos do sexo feminino no Estado de Minas Gerais, 1980.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 ```
@@ -419,7 +419,7 @@ rownames(lifetable)<-c("0", "1","5","10","15","20","30","40","50","60","70","80+
 colnames(lifetable)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tabela de vida para indivíduos do sexo masculino no Estado de Minas Gerais, 2010.") %>%
+lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida para indivíduos do sexo masculino no Estado de Minas Gerais, 2010.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 ```
@@ -498,13 +498,14 @@ rownames(lifetable)<-c("0", "1","5","10","15","20","30","40","50","60","70","80+
 colnames(lifetable)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tabela de vida para indivíduos do sexo feminino no Estado de Minas Gerais, 2010.") %>%
+lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida para indivíduos do sexo feminino no Estado de Minas Gerais, 2010.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 ```
 
+Podemos ver que a expectativa de vida ao nascer no Estado de Minas Gerais em 1980 era de 62,1 anos para os homens e 68 anos para as mulheres. Já no ano de 2010, a expectativa de vida ao nascer aumento para os dois sexos. Foi para 71,6 anos no sexo masculino e para 79 anos no sexo feminino. Esse aumento se deu principalmente pelo avanço científico da sociedade entre esse período. Vacinas foram desenvolvidas, diversos tratamentos para doenças surgiram, ocorreram melhorias do saneamento básico, esses e outros fatores foram os principais responsáveis pela prologação da vida humana e, consequentemente, da expectativa de vida ao nascer.
 
-
+Indivíduos do sexo masculino apresentam uma expectativa de vida ao nascer menor em relação aos indivíduos do sexo feminino pelos motivos já citados na questão 3. 
 
 
 

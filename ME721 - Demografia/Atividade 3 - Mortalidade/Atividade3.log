@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.12) (preloaded format=pdflatex 2021.1.5)  27 MAY 2021 16:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.12) (preloaded format=pdflatex 2021.1.5)  28 MAY 2021 14:17
 entering extended mode
 **./Atividade3.tex
 (Atividade3.tex
@@ -960,11 +960,11 @@ Overfull \hbox (57.78366pt too wide) in paragraph at lines 299--328
 
 [4] (Atividade3.aux) ) 
 Here is how much of TeX's memory you used:
- 16548 strings out of 479590
- 256393 string characters out of 2859169
+ 16560 strings out of 479590
+ 256495 string characters out of 2859169
  634733 words of memory out of 3000000
  33313 multiletter control sequences out of 15000+200000
- 440328 words of font info for 102 fonts, out of 3000000 for 9000
+ 440848 words of font info for 110 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  81i,9n,82p,513b,413s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/Windows 10/AppData/Local/Programs/MiKTeX 2.9/fo
@@ -977,7 +977,7 @@ ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmr10.pfb><C:/Users/Wind
 ows 10/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/U
 sers/Windows 10/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.
 pfb>
-Output written on Atividade3.pdf (5 pages, 89921 bytes).
+Output written on Atividade3.pdf (5 pages, 91136 bytes).
 PDF statistics:
  90 PDF objects out of 1000 (max. 8388607)
  20 named destinations out of 1000 (max. 500000)

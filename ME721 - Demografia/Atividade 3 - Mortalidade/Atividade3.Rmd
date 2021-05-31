@@ -103,8 +103,9 @@ Observa-se uma diminuição da Taxa Bruta de Mortalidade (TBM) de 1980 para 2010
 
 A Taxa de Mortalidade Infantil é dada pelo número esperado de mortes no primeiro ano de vida para cada mil nascidos em uma dada região para um dado período. A formula é como se segue:
 $$ TMI=\frac{\mbox{Óbitos de nascidos vivos com idade menor que 1 ano}}{\mbox{Total de nascidos vivos}}*1000  $$
-- Taxa de Mortalidade Infantil (TMI) de Minas Gerais em 1980: **TMI** = 53,24647
-- Taxa de Mortalidade Infantil (TMI) de Minas Gerais em 2010: **TMI** = 13,39356
+  
+  - Taxa de Mortalidade Infantil (TMI) de Minas Gerais em 1980: **TMI** = 53,24647;
+  - Taxa de Mortalidade Infantil (TMI) de Minas Gerais em 2010: **TMI** = 13,39356,
 
 ```{r, echo=FALSE}
 TMI1980 = mg_morte_1980$total[1]*1000/mg_pop_1980$total[1]
@@ -115,8 +116,9 @@ A taxa de mortalidade infantil essencialmente nos diz o risco de um indivíduo m
 
 A Taxa de Mortalidade na Infância é dada pelo número esperado de mortes nos cinco primeiros anos de vida para cada mil nascidos em uma dada região e um dado período. A formula é como se segue:
 $$ TM5=\frac{\mbox{Óbitos de nascidos vivos com idade menor que 5 anos}}{\mbox{Total de nascidos vivos}}*1000  $$
-- Taxa de Mortalidade na Infância (TM5) de Minas Gerais em 1980: **TMI** = 63,36731
-- Taxa de Mortalidade na Infância (TM5) de Minas Gerais em 2010: **TMI** = 15,63385
+
+  - Taxa de Mortalidade na Infância (TM5) de Minas Gerais em 1980: **TMI** = 63,36731;
+  - Taxa de Mortalidade na Infância (TM5) de Minas Gerais em 2010: **TMI** = 15,63385.
 
 ```{r, echo=FALSE}
 TM51980 = sum(mg_morte_1980$total[c(1,2)])/sum(mg_pop_1980$total[c(1)])*1000

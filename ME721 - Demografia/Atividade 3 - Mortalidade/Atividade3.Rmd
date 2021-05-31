@@ -81,7 +81,7 @@ colnames(mg_morte_2010) = nomes
 
 ## Questão 1
 
-A Taxa Bruta de Mortalidade (TBM) é o número total de óbitos, por mil habitantes, em determinado espaço geográfico, no ano considerado. Ela expressa a frequência anual de mortes e é condicionada por fatores socioeconômicos. A fórmula é dada por: $$ TBM = 1000.\frac{Óbitos}{População}$$
+A Taxa Bruta de Mortalidade (TBM) é o número total de óbitos, por mil habitantes, em determinado espaço geográfico, no ano considerado. Ela expressa a frequência anual de mortes e é condicionada por fatores socioeconômicos. A fórmula é dada por: $$ TBM = 1000.\frac{\mbox{Óbitos}}{\mbox{População}}$$
 
 - Taxa Bruta de Mortalidade (TBM) de Minas Gerais em 1980: **TBM** = 7,002479
 
@@ -101,10 +101,33 @@ Observa-se uma diminuição da Taxa Bruta de Mortalidade (TBM) de 1980 para 2010
 
 ## Questão 2
 
+A Taxa de Mortalidade Infantil é dada pelo número esperado de mortes no primeiro ano de vida para cada mil nascidos em uma dada região para um dado período. A formula é como se segue:
+$$ TMI=\frac{\mbox{Óbitos de nascidos vivos com idade menor que 1 ano}}{\mbox{Total de nascidos vivos}}*1000  $$
+- Taxa de Mortalidade Infantil (TMI) de Minas Gerais em 1980: **TMI** = 53,24647
+- Taxa de Mortalidade Infantil (TMI) de Minas Gerais em 2010: **TMI** = 13,39356
+
+```{r, echo=FALSE}
+TMI1980 = mg_morte_1980$total[1]*1000/mg_pop_1980$total[1]
+TMI2010 = mg_morte_2010$total[1]*1000/mg_pop_2010$total[1]
+```
+A taxa de mortalidade infantil essencialmente nos diz o risco de um indivíduo morrer em seu primeiro ano de vida. Como podemos observar a taxa diminuiu significantemente nesse período de 30 anos, o que significa que menos bebês estão morrendo, indicando um sistema de saude melhor.
+
+
+A Taxa de Mortalidade na Infância é dada pelo número esperado de mortes nos cinco primeiros anos de vida para cada mil nascidos em uma dada região e um dado período. A formula é como se segue:
+$$ TM5=\frac{\mbox{Óbitos de nascidos vivos com idade menor que 5 anos}}{\mbox{Total de nascidos vivos}}*1000  $$
+- Taxa de Mortalidade na Infância (TM5) de Minas Gerais em 1980: **TMI** = 63,36731
+- Taxa de Mortalidade na Infância (TM5) de Minas Gerais em 2010: **TMI** = 15,63385
+
+```{r, echo=FALSE}
+TM51980 = sum(mg_morte_1980$total[c(1,2)])/sum(mg_pop_1980$total[c(1)])*1000
+TM52010 = sum(mg_morte_2010$total[c(1,2)])/sum(mg_pop_2010$total[c(1)])*1000
+```
+A taxa de mortalidade na infância essencialmente nos diz o risco de um indivíduo morrer em seus cinco primeiros anos. Como podemos observar novamente, a taxa diminuiu significantemente durante o período observado, reduzindo pra menos de 1/4 da taxa inicial, o que indica um grande desenvolvimento no sistema de saúde.
+
 ## Questão 3
 
 A Taxa Específica de Mortalidade (TEM) expressa a frequência anual de mortes por faixa etário e sexo e é condicionada por fatores socioeconômicos. A fórmula é dada por:
-$$TEM = \frac{ÓbitosPorSexo_EFaixaEtária}{PopulaçãoPorSexo_EFaixaEtária}$$
+$$TEM = \frac{\mbox{Óbitos Por Sexo e Faixa Etária}}{\mbox{População Por Sexo e Faixa Etária}}$$
 
 ```{r, echo=FALSE}
 TEM_H_1980 = (mg_morte_1980$masc)/(mg_pop_1980$masc)

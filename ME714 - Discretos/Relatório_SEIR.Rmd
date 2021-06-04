@@ -66,11 +66,12 @@ A Itália foi um dos principais países que sofreram por esse vírus no início 
 
 Em 8 de março de 2020, o Primeiro Ministro Italiano Giuseppe Conte implementou estado de quarentena em toda Lombardia e em outras 14 províncias nortenhas, que colocou 60 milhões de pessoas em lockdown [5].
 
-Em 11 de março,  devido ao grande número de casos e da rápida propagação do vírus em todos os continentes, a Organização Mundial da Saúde (OMS) declarou que vivemos numa pandemia do Coronavírus [6]. 
+Em 11 de março,  devido ao grande número de casos e da rápida propagação do vírus em todos os continentes, a Organização Mundial da Saúde (OMS) declarou pandemia do Coronavírus [6]. 
 
 Em 21 de março na Itália, todos os serviços não essenciais,  indústrias e escolas foram fechados e a movimentação de pessoas foi restringida [7]. Apenas serviços essenciais puderam permanecer abertos, como farmácias, supermercados e áreas relacionadas à saúde (hospitais e indústrias produtoras de oxigênio e respiradores).
 
 Durante esse período atípico de propagação do Coronavírus, o governo italiano implementou medidas individuais de proteção, como obrigatoriedade do uso de máscara em transportes e lugares públicos e quarentena de 14 dias para quem testou positivo para a doença [8].
+
 Devido ao número limitado de testes feitos e disponíveis, pois a demanda estava alta no começo de 2020, o número real de infectados na Itália, assim como em outros países, é estimado como muito maior que a contagem oficial [9].
 
 Há diversos fatores de risco que ajudam a explicar como será a gravidade da doença em indivíduos. Esses fatores podem ser: histórico de doenças cardíacas, respiratórias e autoimunes; tipo sanguíneo; sexo; idade; diabetes; gravidez; entre outros [10]. Como as populações possuem diferentes porcentagens desses fatores, é impossível definir uma medida exata para a mortalidade. Porém, em média, é estimado que a letalidade da COVID-19 esteja entre 1% a 2% [11].

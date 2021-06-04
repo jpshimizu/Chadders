@@ -32,9 +32,9 @@ indent: true
 {\large Universidade Estadual de Campinas}\\[0.2cm] 
 {\large Instituto de Matemática, Estatística e Computação Científica}\\[0.2cm] 
 {\large Departamento de Estatística}\\[4cm]
-{\bf \huge Aplicação do modelo SEIR para previsão da têndencia da COVID-19 na XXXXXX}\\[0.9cm]
+{\bf \huge Aplicação do modelo SEIR para previsão da têndencia da COVID-19 na Itália}\\[0.9cm]
 {\large Integrantes:}\\[0.2cm]
-{\large covidRodigo Silva de Oliveira -  218405}\\[0.2cm]
+{\large Jadson Rodigo Silva de Oliveira -  218405}\\[0.2cm]
 {\large João Pedro Shimizu Rodrigues - 218793}\\[0.2cm]
 {\large Guilherme Martins de Castro Gurgel - 217249}\\[0.2cm]
 {\large Rodrigo Forti - 224191}\\[8.5cm]
@@ -58,14 +58,39 @@ knitr::opts_chunk$set(echo = FALSE,
 options(OutDec = ",")
 ```
 
+## Introdução
+
+No final de 2019, um novo tipo de vírus da família do Coronavírus começou a circular entre humanos na cidade de Wuhan, na China [1]. Ele foi disseminado rapidamente para todo mundo por causa de uma característica: um indivíduo infectado por esse novo coronavírus pode transmiti-lo para outras pessoas até 48 horas antes de apresentar os sintomas  da COVID-19 (Coronavírus Disease - 2019) [2]. De fato, pessoas sem sintomas podem ter uma probabilidade maior de transmitir o vírus, pois elas têm chances menores de estarem isoladas e podem não ter adotado os procedimentos recomendados para a prevenção da infecção.
+
+A Itália foi um dos principais países que sofreram por esse vírus no início de 2020 devido à grande circulação de pessoas para turismo. A primeira detecção de um italiano com o coronavírus ocorreu em 21 de fevereiro em uma cidade pequena perto de Milão, na região da Lombardia, no Norte do país [3]. E no mês de março o vírus já tinha se espalhado para todas as regiões do país [4].
+
+Em 8 de março de 2020, o Primeiro Ministro Italiano Giuseppe Conte implementou estado de quarentena em toda Lombardia e em outras 14 províncias nortenhas, que colocou 60 milhões de pessoas em lockdown [5].
+
+Em 11 de março,  devido ao grande número de casos e da rápida propagação do vírus em todos os continentes, a Organização Mundial da Saúde (OMS) declarou que vivemos numa pandemia do Coronavírus [6]. 
+
+Em 21 de março na Itália, todos os serviços não essenciais,  indústrias e escolas foram fechados e a movimentação de pessoas foi restringida [7]. Apenas serviços essenciais puderam permanecer abertos, como farmácias, supermercados e áreas relacionadas à saúde (hospitais e indústrias produtoras de oxigênio e respiradores).
+
+Durante esse período atípico de propagação do Coronavírus, o governo italiano implementou medidas individuais de proteção, como obrigatoriedade do uso de máscara em transportes e lugares públicos e quarentena de 14 dias para quem testou positivo para a doença [8].
+Devido ao número limitado de testes feitos e disponíveis, pois a demanda estava alta no começo de 2020, o número real de infectados na Itália, assim como em outros países, é estimado como muito maior que a contagem oficial [9].
+
+Há diversos fatores de risco que ajudam a explicar como será a gravidade da doença em indivíduos. Esses fatores podem ser: histórico de doenças cardíacas, respiratórias e autoimunes; tipo sanguíneo; sexo; idade; diabetes; gravidez; entre outros [10]. Como as populações possuem diferentes porcentagens desses fatores, é impossível definir uma medida exata para a mortalidade. Porém, em média, é estimado que a letalidade da COVID-19 esteja entre 1% a 2% [11].
+
+## Objetivo
+
+O objetivo deste trabalho foi predizer como seria a pandemia da COVID-19 na Itália se não fossem tomadas as medidas de contenção de propagação e, após isso,  foi feita uma previsão de como será após a tomada das medidas como lockdown e uso de máscara. A predição foi realizada com o modelo epidemiológico SEIR.
+
+Foi analisado apenas o período inicial da pandemia, pois há diversos fatores que o modelo SEIR, pelo menos em sua versão mais simplista, não consegue captar, por exemplo, o desenvolvimento e aplicação de vacinas, migração de pessoas e reinfecção.
+
 
 ## Metodologia
 
-A pandemia de COVID-19 fez com que centros de pesquisa e organizações voltassem a atenção para modelos epidemiológicos. A capacidade dos modelos em fazer previsões sobre o futuro da disseminação de vírus permite aos cientistas avaliar planos de vacinação e de isolamento que no futuro podem ser implementados através de políticas governamentais.
+A pandemia de COVID-19 fez com que centros de pesquisa e organizações voltassem a atenção para modelos epidemiológicos, entre eles o SEIR. A capacidade dos modelos em fazer previsões sobre o futuro da disseminação de vírus permite aos cientistas avaliar planos de vacinação e de isolamento que no futuro podem ser implementados através de políticas governamentais.
 
 ### Modelo SEIR
 
-Neste trabalho, aplicamos o modelo SEIR para fazer a previsão da progressão da COVID-19 na XXXXX. Esse modelo é dado por 4 componentes/estados: Suscetível, Exposto, Infeccioso e Removido (SEIR), e pode ser visto na Figura 1 junto com as taxas de transição entre os estados.
+Neste trabalho, foi aplicado o modelo SEIR para fazer a previsão da progressão da COVID-19 na Itália.  Esse modelo é dado por 4 componentes/estados: Suscetível, Exposto, Infeccioso e Removido (SEIR), e pode ser visto na Figura 1 junto com as taxas de transição entre os estados.
+
+O modelo utilizado nesse trabalho se baseou no modelo do artigo das pesquisadoras Aidalina Mahmud e Poh Ying Lim: \textit{Applying the SEIR Model in Forecasting The COVID-19 Trend in Malaysia: A Preliminary Study} [13]. A análise seguiu os mesmos passos do artigo, a diferença está nos dados utlizados. As pesquisadoras usaram os dados da Malásia e esse projeto, os dados da Itália.
 
 ```{r, fig.cap="Estados do modelo SEIR: Suscetível (S), Exposto (E), Infeccioso (I) e Removido (R).",out.width = "99%"}
 library(knitr)
@@ -77,21 +102,21 @@ include_graphics(img_path)
 
 Suscetível, Exposto, Infeccioso e Removido são estados pelos quais um indivíduo progride na sequência. A taxa de infecção, $\beta$, controla a taxa de disseminação que representa a probabilidade de transmitir a doença entre suscetível e um indivíduo infectado. A taxa de incubação, $\delta$, é a taxa de indivíduos expostos a se tornarem infectados (Tempo médio de incubação é dado por $1/\delta$). A taxa de remoção, $\gamma = 1/D$, é determinada pelo tempo de duração médio, D, da infecção. 
 
-A quantidade S denota o número de indivíduos que estão suscetíveis à doença, mas não infectados. Ou seja, todas as pessoas da população que estão em risco. A quantidade E denota o número de indivíduos que foram expostos ou infectados, porém não infecciosos. A quantidade I denota o número de indivíduos que podem transmitir a doença através do contato com indivíduos suscetíveis. E a quantidade R denota o número de indivíduos que conseguiram sobreviver e adquiriram imunidade para a doença ou morreram. As equações que governam a evolução e a dinâmica do modelo SEIR podem ser descritas pelas seguintes equações diferenciais ordinárias [ ].
+A quantidade S denota o número de indivíduos que estão suscetíveis à doença, mas não infectados. Ou seja, todas as pessoas da população que estão em risco. A quantidade E denota o número de indivíduos que foram expostos ou infectados, porém não infecciosos. A quantidade I denota o número de indivíduos que podem transmitir a doença através do contato com indivíduos suscetíveis. E a quantidade R denota o número de indivíduos que conseguiram sobreviver e adquiriram imunidade para a doença ou morreram. As equações que governam a evolução e a dinâmica do modelo SEIR podem ser descritas pelas seguintes equações diferenciais ordinárias (1).
 
 $$ \frac{dS}{dt} = \frac{-\beta S I}{N}$$
 
-$$ \frac{dE}{dt} = \frac{-\beta S I}{N} - \delta E$$
+$$ \frac{dE}{dt} = \frac{-\beta S I}{N} - \delta E \tag{1}$$
 
 $$\frac{dI}{dt} = \delta E - \gamma I$$
 
 $$\frac{dR}{dt} = \gamma I$$
 
-Estudos mais aprofundados mostraram que o período médio de incubação para o Sars-Cov-2 é de ¾ dias, enquanto o período médio em que o indivíduo se mantém infeccioso é de 14 dias (ref).
+Estudos mais aprofundados mostraram que o período de incubação para o Sars-Cov-2 varia de 2 até 14 dias e os sintomas começam entre 4 e 5 dias após a exposição. Uma característica do novo coronavírus é que um indivíduo exposto pode ser contagioso 48 horas antes de sentir os sintomas [2].
 
 ## Dados
 
-O conjunto de dados utilizado é proveniente de um repositório na plataforma Github e é mantido e atualizado pelo time de Ciência e Engenharia da Universidade John Hopkins, EUA ( ). 
+O conjunto de dados utilizado é proveniente de um repositório na plataforma Github e é mantido e atualizado pelo time de Ciência e Engenharia da Universidade John Hopkins, EUA [14]. 
 
 O banco de dados inclui séries temporais de rastreio do número de pessoas afetadas pela COVID-19 no mundo, incluindo:
 
@@ -101,7 +126,7 @@ O banco de dados inclui séries temporais de rastreio do número de pessoas afet
 
 - O número de pessoas recuperadas da doença.
 
-Como trabalhamos apenas com os dados do país XXXXX, ocorreu uma filtragem para que só esse país de interesse permanecesse no banco.
+Como trabalhamos apenas com os dados da Itália, ocorreu uma filtragem para que só esse país permanecesse no banco.
 
 ```{r Pacotes}
 #Pacotes
@@ -227,3 +252,39 @@ par (new = TRUE)
 # hospedeiros recuperados ao longo do tempo
 plot (R ~ time, data = output, type='b', ylim = c(0,1), col = 'green', ylab = '', axes = FALSE)
 ```
+
+\newpage
+
+## Bibliografia
+
+  -[1] Coronaviruses. European Centre for Disease Prevention and Control, 16 de março de 2021. Disponível em: \url{https://www.ecdc.europa.eu/en/covid-19/latest-evidence/coronaviruses}. Acesso em: 4 de junho de 2021. 
+  
+  -[2] If you've been exposed to the coronavirus. Harvard Medical School, 2 de junho de 2021.
+  
+  -[3] Coronavírus chegou à Itália mais cedo do que se pensava. AgênciaBrasil, 16 de novembro de 2020. Disponível em: \url{https://agenciabrasil.ebc.com.br/internacional/noticia/2020-11/coronavirus-chegou-italia-mais-cedo-do-que-se-pensava}. Acesso em: 4 de junho de 2021. 
+  
+  -[4] Coronavirus. Colpite tutte le regioni. La Protezione civile: ecco i numeri aggiornati. Avvenire, 5 de março de 2020. Disponível em: \url{https://www.avvenire.it/attualita/pagine/coronavirus-aggiornamento-5-marzo-2020}. Acesso em: 4 de junho de 2021. 
+  
+  -[5] Coronavirus: Italy extends emergency measures nationwide. BBC, 10 de março de 2020. Disponível em: \url{https://www.bbc.com/news/world-europe-51810673}. Acesso em: 4 de junho de 2021. 
+  
+  -[6] OMS declara pandemia de coronavírus. G1, 11 de março de 2020. Disponível em: \url{https://g1.globo.com/bemestar/coronavirus/noticia/2020/03/11/oms-declara-pandemia-de-coronavirus.ghtml}. Acesso em: 4 de junho de 2021. 
+  
+  -[7] Coronavirus: Italy bans any movement inside country as toll nears 5,500. The Guardian, 22 de março de 2020. Disponível em: \url{https://www.theguardian.com/world/2020/mar/22/italian-pm-warns-of-worst-crisis-since-ww2-as-coronavirus-deaths-leap-by-almost-800}. Acesso em: 4 de junho de 2021. 
+  
+  -[8] Italy: Government and institution measures in response to COVID-19. KPMG, 28 de outubro de 2020. Disponível em: \url{https://home.kpmg/xx/en/home/insights/2020/04/italy-government-and-institution-measures-in-response-to-covid.html}. Acesso em: 4 de junho de 2021. 
+  
+  -[9] The total number of Italian coronavirus cases could be ’10 times higher’ than known tally, according to one official. CNBC, 24 de março de 2020. Disponível em: \url{https://www.cnbc.com/2020/03/24/italian-coronavirus-cases-seen-10-times-higher-than-official-tally.html}. Acesso em: 4 de junho de 2021. 
+  
+  -[10] Risk factors and risk groups. European Centre for Disease Prevention and Control, 26 de abril de 2021.
+  
+  -[11] How deadly is the coronavirus? Scientists are close to an answer. Nature, 16 de junho de 2020. Disponível em: \url{https://www.nature.com/articles/d41586-020-01738-2}. Acesso em: 4 de junho de 2021. 
+  
+  -[12] How deadly is the coronavirus? Scientists are close to an answer. Nature, 16 de junho de 2020. Disponível em: \url{https://www.nature.com/articles/d41586-020-01738-2}. Acesso em: 4 de junho de 2021. 
+  
+  -[13] Aidalina Mahmud e Poh Ying Lim. Applying the SEIR Model in Forecasting The COVID-19 Trend in Malaysia: A Preliminary Study
+. MedRxiv, 17 de abril de 2020. Disponível em: \url{https://www.medrxiv.org/content/10.1101/2020.04.14.20065607v1.article-info}. 
+  
+  -[14] COVID-19 dataset. Johns Hopkins University Center for Systems Science and Engineering (CSSE), 4 de junho de 2021. Disponível em: \url{https://github.com/datasets/covid-19}. Acesso em: 4 de junho de 2021. 
+  
+
+  

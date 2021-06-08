@@ -1,0 +1,101 @@
+---
+output:
+  pdf_document:
+    fig_crop: no
+  html_document:
+    df_print: paged
+fontsize: 11pt
+documentclass: article
+geometry:
+- a4paper
+- textwidth=16cm
+- textheight=21cm
+header-includes:
+- \usepackage[brazil, english, portuguese]{babel}
+- \usepackage[utf8]{inputenc}
+- \usepackage[T1]{fontenc}
+- \usepackage[fixlanguage]{babelbib}
+- \usepackage{times}
+- \usepackage{caption}
+- \captionsetup[table]{skip=10pt}
+- \usepackage{amsmath}
+- \usepackage{float}
+- \usepackage{indentfirst}
+indent: yes
+---
+
+```{=tex}
+\begin{titlepage} 
+\begin{center} 
+{\large Universidade Estadual de Campinas}\\[0.2cm] 
+{\large Instituto de Matemática, Estatística e Computação Científica}\\[0.2cm] 
+{\large Departamento de Estatística}\\[4cm]
+{\bf \huge  Atividade 3 - ME721}\\[0.9cm]
+{\large Integrantes:}\\[0.2cm]
+{\large Rodrigo Forti - 224191}\\[0.2cm]
+{\large João Pedro Shimizu Rodrigues - 218793}\\[0.2cm]
+{\large Guilherme Martins de Castro Gurgel - 217249}\\[10cm]
+{\large Campinas}\\[0.2cm]
+{\large 2021}
+\end{center}
+\end{titlepage}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.height = 4, 
+                      fig.width = 7, 
+                      fig.pos='H',
+                      OutDec = ',',
+                      #out.extra = '',
+                      comment = NA)
+options(OutDec = ",")
+```
+
+```{r}
+#Pacotes
+library(tidyverse)
+library(kableExtra)
+library(knitr)
+library(patchwork)
+library(readxl)
+```
+
+# Estado escolhido: Bahia (BH)
+
+```{r carregando os dados}
+bh_morte_geral_1980 = read_delim("mortes_geral_bh_1980.csv",skip = 3,delim = ";",n_max = 12) %>% dplyr::select(-Ign);#bh_morte_geral_1980
+bh_morte_externa_1980 = read_delim("mortes_externas_bh_1980.csv",skip = 3,delim = ";",n_max = 12) %>% dplyr::select(-Ign);#bh_morte_externa_1980
+bh_morte_geral_2010 = read_delim("mortes_geral_bh_2010.csv",skip = 3,delim = ";",n_max = 12) %>% dplyr::select(-Ign)#bh_morte_geral_2010
+bh_morte_externa_2010 = read_delim("mortes_externas_bh_2010.csv",skip = 3,delim = ";",n_max = 12) %>% dplyr::select(-Ign);#bh_morte_externa_2010
+
+pop_bh_1980 = read_excel("pop_bh_1980.xlsx",skip = 6,n_max = 19,col_names = F)[,2:4][-c(2,3),]; #pop_bh_1980
+
+pop_bh_2010 = read_excel("pop_bh_2010.xlsx",skip = 6,n_max = 19,col_names = F)[-c(2,3),]; #pop_bh_2010
+
+nomes = c("faixa","masc","femi","total")
+
+colnames(bh_morte_geral_1980) = nomes
+colnames(bh_morte_geral_2010) = nomes
+colnames(bh_morte_externa_2010) = nomes
+colnames(bh_morte_externa_1980) = nomes
+
+nomes2 = c("faixa","masc","femi")
+
+colnames(pop_bh_1980) = nomes2
+colnames(pop_bh_2010) = nomes2
+
+```
+
+## Questão 1
+
+
+## Questão 2
+
+
+## Questão 3
+
+
+

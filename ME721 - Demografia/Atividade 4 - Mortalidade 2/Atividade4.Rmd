@@ -486,9 +486,9 @@ df$masc  <- df$masc - bh_morte_externa_1980$masc
 df$femi  <- df$femi - bh_morte_externa_1980$femi
 df$total <- df$total - bh_morte_externa_1980$total
 df2      <- bh_morte_geral_2010
-df2$masc <- df$masc - bh_morte_externa_2010$masc
-df2$femi <- df$femi - bh_morte_externa_2010$femi
-df2$total<- df$total - bh_morte_externa_2010$total
+df2$masc <- df2$masc - bh_morte_externa_2010$masc
+df2$femi <- df2$femi - bh_morte_externa_2010$femi
+df2$total<- df2$total - bh_morte_externa_2010$total
 
 lt<-matrix(c(1),11,13)
 lt[,1]<-c(5,5,5,5,rep(10,7))
@@ -542,37 +542,35 @@ grupo_idade = c(0,5,10,15,20,30,40,50,60,70,80)
 
 
 ```{r}
-lt2<-matrix(c(1),11,13)
-lt2[,1]<-c(5,5,5,5,rep(10,7))
+lt2<-matrix(c(1),10,13)
+lt2[,1]<-c(5,5,5,5,rep(10,6))
 
-lt2[,2] <- c(df$masc[1] + df$masc[2], df$masc[3:12])
+lt2[,2] <- c(df2$masc[1] + df2$masc[2], df2$masc[3:11])
 
-lt2[,3] <- c(pop_bh_2010$masc[1:4], pop_bh_2010$masc[5] + pop_bh_2010$masc[6], pop_bh_2010$masc[7] + pop_bh_2010$masc[8], pop_bh_2010$masc[9] + pop_bh_2010$masc[10], pop_bh_2010$masc[11] + pop_bh_2010$masc[12], pop_bh_2010$masc[13] + pop_bh_2010$masc[14], pop_bh_2010$masc[15] + pop_bh_2010$masc[16], pop_bh_2010$masc[17] )
+lt2[,3] <- c(pop_bh_2010$masc[1:4], pop_bh_2010$masc[5] + pop_bh_2010$masc[6], pop_bh_2010$masc[7] + pop_bh_2010$masc[8], pop_bh_2010$masc[9] + pop_bh_2010$masc[10], pop_bh_2010$masc[11] + pop_bh_2010$masc[12], pop_bh_2010$masc[13] + pop_bh_2010$masc[14], pop_bh_2010$masc[15] + pop_bh_2010$masc[16])
 
 lt2[,4]<-lt2[,2]/lt2[,3]
 
-lt2[11,5]<-1/lt2[11,4]
-
-for (i in 1:10){lt2[i,6]<-(lt2[i,1]*lt2[i,4])/
+for (i in 1:9){lt2[i,6]<-(lt2[i,1]*lt2[i,4])/
   ((1)+((lt2[i,1]-lt2[i,5])*lt2[i,4]))}
 
-lt2[11,6]<-1.000000
+lt2[10,6]<-1.000000
 
 lt2[,7]<-(1-lt2[,6])
 
-for(i in 1:11){lt2[i,5]<-lt2[i,6] * pop_bh_2010$masc[i]}
+for(i in 1:10){lt2[i,5]<-lt2[i,6] * pop_bh_2010$masc[i]}
 
 lt2[1,8]<-100000 #estabelecendo a raiz da t�bua
 
-for (i in 2:11){lt2[i,8]<-(lt2[i-1,7]*lt2[i-1,8])}
+for (i in 2:10){lt2[i,8]<-(lt2[i-1,7]*lt2[i-1,8])}
 
-for (i in 1:10){lt2[i,9]<-lt2[i,8]-lt2[i+1,8]}
+for (i in 1:9){lt2[i,9]<-lt2[i,8]-lt2[i+1,8]}
 
-lt2[11,9]<-lt2[11,8]
+lt2[10,9]<-lt2[10,8]
 
-for (i in 1:10){lt2[i,10]<-((lt2[i,1]*lt2[i+1,8])+(lt2[i,5]*lt2[i,9]))}
+for (i in 1:9){lt2[i,10]<-((lt2[i,1]*lt2[i+1,8])+(lt2[i,5]*lt2[i,9]))}
 
-lt2[11,10]<-lt2[11,9]/lt2[11,4]
+lt2[10,10]<-lt2[10,9]/lt2[10,4]
 
 lt2[,11]<-lt2[,9]/lt2[,10]
 
@@ -581,7 +579,7 @@ lt2[,12]<-(rev(cumsum(rev(lt2[,10]))))
 lt2[,13]<-lt2[,12]/lt2[,8]
 
 ##colocando o nome das linhas e colunas
-rownames(lt2)<-c("0","5","10","15","20","30","40","50","60","70","80+")
+rownames(lt2)<-c("0","5","10","15","20","30","40","50","60","70")
 colnames(lt2)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
@@ -589,7 +587,7 @@ lt2 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = 
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 
-grupo_idade = c(0,5,10,15,20,30,40,50,60,70,80)
+grupo_idade = c(0,5,10,15,20,30,40,50,60,70)
 ```
 
 ```{r}
@@ -645,37 +643,35 @@ grupo_idade = c(0,5,10,15,20,30,40,50,60,70,80)
 
 
 ```{r}
-lt4<-matrix(c(1),11,13)
-lt4[,1]<-c(5,5,5,5,rep(10,7))
+lt4<-matrix(c(1),10,13)
+lt4[,1]<-c(5,5,5,5,rep(10,6))
 
-lt4[,2] <- c(df$femi[1] + df$femi[2], df$femi[3:12])
+lt4[,2] <- c(df2$femi[1] + df2$femi[2], df2$femi[3:11])
 
-lt4[,3] <- c(pop_bh_2010$femi[1:4], pop_bh_2010$femi[5] + pop_bh_2010$femi[6], pop_bh_2010$femi[7] + pop_bh_2010$femi[8], pop_bh_2010$femi[9] + pop_bh_2010$femi[10], pop_bh_2010$femi[11] + pop_bh_2010$femi[12], pop_bh_2010$femi[13] + pop_bh_2010$femi[14], pop_bh_2010$femi[15] + pop_bh_2010$femi[16], pop_bh_2010$femi[17] )
+lt4[,3] <- c(pop_bh_2010$femi[1:4], pop_bh_2010$femi[5] + pop_bh_2010$femi[6], pop_bh_2010$femi[7] + pop_bh_2010$femi[8], pop_bh_2010$femi[9] + pop_bh_2010$femi[10], pop_bh_2010$femi[11] + pop_bh_2010$femi[12], pop_bh_2010$femi[13] + pop_bh_2010$femi[14], pop_bh_2010$femi[15] + pop_bh_2010$femi[16])
 
 lt4[,4]<-lt4[,2]/lt4[,3]
 
-lt4[11,5]<-1/lt4[11,4]
-
-for (i in 1:10){lt4[i,6]<-(lt4[i,1]*lt4[i,4])/
+for (i in 1:9){lt4[i,6]<-(lt4[i,1]*lt4[i,4])/
   ((1)+((lt4[i,1]-lt4[i,5])*lt4[i,4]))}
 
-lt4[11,6]<-1.000000
+lt4[10,6]<-1.000000
 
 lt4[,7]<-(1-lt4[,6])
 
-for(i in 1:11){lt4[i,5]<-lt4[i,6] * pop_bh_2010$femi[i]}
+for(i in 1:10){lt4[i,5]<-lt4[i,6] * pop_bh_2010$femi[i]}
 
 lt4[1,8]<-100000 #estabelecendo a raiz da t�bua
 
-for (i in 2:11){lt4[i,8]<-(lt4[i-1,7]*lt4[i-1,8])}
+for (i in 2:10){lt4[i,8]<-(lt4[i-1,7]*lt4[i-1,8])}
 
-for (i in 1:10){lt4[i,9]<-lt4[i,8]-lt4[i+1,8]}
+for (i in 1:9){lt4[i,9]<-lt4[i,8]-lt4[i+1,8]}
 
-lt4[11,9]<-lt4[11,8]
+lt4[10,9]<-lt4[10,8]
 
-for (i in 1:10){lt4[i,10]<-((lt4[i,1]*lt4[i+1,8])+(lt4[i,5]*lt4[i,9]))}
+for (i in 1:9){lt4[i,10]<-((lt4[i,1]*lt4[i+1,8])+(lt4[i,5]*lt4[i,9]))}
 
-lt4[11,10]<-lt4[11,9]/lt4[11,4]
+lt4[10,10]<-lt4[10,9]/lt4[10,4]
 
 lt4[,11]<-lt4[,9]/lt4[,10]
 
@@ -684,7 +680,7 @@ lt4[,12]<-(rev(cumsum(rev(lt4[,10]))))
 lt4[,13]<-lt4[,12]/lt4[,8]
 
 ##colocando o nome das linhas e colunas
-rownames(lt4)<-c("0","5","10","15","20","30","40","50","60","70","80+")
+rownames(lt4)<-c("0","5","10","15","20","30","40","50","60","70")
 colnames(lt4)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
@@ -692,8 +688,33 @@ lt4 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = 
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 
-grupo_idade = c(0,5,10,15,20,30,40,50,60,70,80)
+grupo_idade = c(0,5,10,15,20,30,40,50,60,70)
 ```
+
+```{r}
+x1 = c(0,5,10,15,20,30,40,50,60,70,80)
+y1 = log(lt[,11])
+z1 = log(lt3[,11])
+
+Shimi1980 = data.frame(x1,y1,z1)
+
+x2 = c(0,5,10,15,20,30,40,50,60,70)
+y2 = log(lt2[,11])
+z2 = log(lt4[,11])
+
+Shimi2010 = data.frame(x2,y2,z2)
+```
+
+
+```{r}
+ggplot(Shimi1980) + geom_point(aes(x = x1, y = y1), col = "blue") + geom_point(aes(x = x1, y = z1), col = "red") + geom_line(aes(x = x1, y = y1), col = "blue") + geom_line(aes(x = x1, y = z1), col = "red") + xlab("Idade") + ylab("Taxas de Mortalidade em 1980 (escala logaritma)") + ggtitle("Gráfico comparando ambos os sexos em 1980")
+```
+
+
+```{r}
+ggplot(Shimi2010) + geom_point(aes(x = x2, y = y2), col = "blue") + geom_point(aes(x = x2, y = z2), col = "red") + geom_line(aes(x = x2, y = y2), col = "blue") + geom_line(aes(x = x2, y = z2), col = "red") + xlab("Idade") + ylab("Taxas de Mortalidade em 1980 (escala logaritma)") + ggtitle("Gráfico comparando ambos os sexos em 2010")
+```
+Como podemos ver através das tabelas e dos gráficos, fica bem clara a significância das causas de mortes externas, sabemos isso por causa da diferença dos resultados quando comparados com o primeiro exercício. Podemos também observar que a mortalidade entre os sexos são bem similares em ambos os anos. Vemos também que a mortalidade tem um pico local de mortalidade na faixa de 15 anos, assim caindo nas próximas faixas. E por último fica claro que a quantidade de pessoas morrendo por causas não externas diminuiu neste período.
 
 ## Item c
 

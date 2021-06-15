@@ -30,7 +30,7 @@ indent: yes
 {\large Universidade Estadual de Campinas}\\[0.2cm] 
 {\large Instituto de Matemática, Estatística e Computação Científica}\\[0.2cm] 
 {\large Departamento de Estatística}\\[4cm]
-{\bf \huge  Atividade 3 - ME721}\\[0.9cm]
+{\bf \huge  Atividade 4 - ME721}\\[0.9cm]
 {\large Integrantes:}\\[0.2cm]
 {\large Rodrigo Forti - 224191}\\[0.2cm]
 {\large João Pedro Shimizu Rodrigues - 218793}\\[0.2cm]
@@ -200,7 +200,7 @@ rownames(lifetable)<-c("0","5","10","15","20","30","40","50","60","70","80+")
 colnames(lifetable)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida para indivíduos do sexo masculino no Estado da Bahia, 1980.") %>%
+lifetable %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% dplyr::select(-Tx) %>% kable(caption = "Tábua de vida para indivíduos do sexo masculino no Estado da Bahia, 1980.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 
@@ -281,7 +281,7 @@ rownames(lifetable2)<-c("0","5","10","15","20","30","40","50","60","70","80+")
 colnames(lifetable2)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lifetable2 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida para indivíduos do sexo feminino no Estado da Bahia, 1980.") %>%
+lifetable2 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% dplyr::select(-Tx) %>% kable(caption = "Tábua de vida para indivíduos do sexo feminino no Estado da Bahia, 1980.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 ```
@@ -361,7 +361,7 @@ rownames(lifetable3)<-c("0","5","10","15","20","30","40","50","60","70")
 colnames(lifetable3)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lifetable3 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida para indivíduos do sexo masculino no Estado da Bahia, 2010.") %>%
+lifetable3 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% dplyr::select(-Tx) %>% kable(caption = "Tábua de vida para indivíduos do sexo masculino no Estado da Bahia, 2010.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 ```
@@ -441,7 +441,7 @@ rownames(lifetable4)<-c("0","5","10","15","20","30","40","50","60","70")
 colnames(lifetable4)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lifetable4 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida para indivíduos do sexo feminino no Estado da Bahia, 2010.") %>%
+lifetable4 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% dplyr::select(-Tx) %>% kable(caption = "Tábua de vida para indivíduos do sexo feminino no Estado da Bahia, 2010.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 ```
@@ -533,7 +533,7 @@ rownames(lt)<-c("0","5","10","15","20","30","40","50","60","70","80+")
 colnames(lt)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lt %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida sem causas externas para indivíduos do sexo masculino no Estado da Bahia, 1980.") %>%
+lt %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% dplyr::select(-Tx) %>% kable(caption = "Tábua de vida sem causas externas para indivíduos do sexo masculino no Estado da Bahia, 1980.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 
@@ -583,7 +583,7 @@ rownames(lt2)<-c("0","5","10","15","20","30","40","50","60","70")
 colnames(lt2)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lt2 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida sem causas externas para indivíduos do sexo masculino no Estado da Bahia, 2010.") %>%
+lt2 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% dplyr::select(-Tx) %>% kable(caption = "Tábua de vida sem causas externas para indivíduos do sexo masculino no Estado da Bahia, 2010.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 
@@ -634,7 +634,7 @@ rownames(lt3)<-c("0","5","10","15","20","30","40","50","60","70","80+")
 colnames(lt3)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lt3 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida sem causas externas para indivíduos do sexo feminino no Estado da Bahia, 1980.") %>%
+lt3 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% dplyr::select(-Tx) %>% kable(caption = "Tábua de vida sem causas externas para indivíduos do sexo feminino no Estado da Bahia, 1980.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 
@@ -684,7 +684,7 @@ rownames(lt4)<-c("0","5","10","15","20","30","40","50","60","70")
 colnames(lt4)<-c("n","nDx","nNx","nMx","nax","nqx","npx","lx","ndx","nLx","nmx","Tx","ex")
 
 ##Tabela de vida completa
-lt4 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% kable(caption = "Tábua de vida sem causas externas para indivíduos do sexo feminino no Estado da Bahia, 2010.") %>%
+lt4 %>% as.data.frame() %>% mutate_if(is.numeric, round, 1) %>% dplyr::select(-Tx) %>% kable(caption = "Tábua de vida sem causas externas para indivíduos do sexo feminino no Estado da Bahia, 2010.") %>%
   kable_styling(position = "center",latex_options = "HOLD_position") %>%
   kable_styling(full_width = F)
 
@@ -716,7 +716,6 @@ ggplot(Shimi2010) + geom_point(aes(x = x2, y = y2), col = "blue") + geom_point(a
 ```
 Como podemos ver através das tabelas e dos gráficos, fica bem clara a significância das causas de mortes externas, sabemos isso por causa da diferença dos resultados quando comparados com o primeiro exercício. Podemos também observar que a mortalidade entre os sexos são bem similares em ambos os anos. Vemos também que a mortalidade tem um pico local de mortalidade na faixa de 15 anos, assim caindo nas próximas faixas. E por último fica claro que a quantidade de pessoas morrendo por causas não externas diminuiu neste período.
 
-## Item c
 
 
 

@@ -32,7 +32,7 @@ indent: true
 {\large Universidade Estadual de Campinas}\\[0.2cm] 
 {\large Instituto de Matemática, Estatística e Computação Científica}\\[0.2cm] 
 {\large Departamento de Estatística}\\[4cm]
-{\bf \huge Aplicação do modelo SEIR para previsão da têndencia da COVID-19 na Itália}\\[0.9cm]
+{\bf \huge Aplicação do modelo SIR para previsão da têndencia da COVID-19 na Itália}\\[0.9cm]
 {\large Integrantes:}\\[0.2cm]
 {\large Jadson Rodigo Silva de Oliveira -  218405}\\[0.2cm]
 {\large João Pedro Shimizu Rodrigues - 218793}\\[0.2cm]
@@ -78,42 +78,37 @@ Há diversos fatores de risco que ajudam a explicar como será a gravidade da do
 
 ## Objetivo
 
-O objetivo deste trabalho foi predizer como seria a pandemia da COVID-19 na Itália se não fossem tomadas as medidas de contenção de propagação e, após isso,  foi feita uma previsão de como será após a tomada das medidas como lockdown e uso de máscara. A predição foi realizada com o modelo epidemiológico SEIR.
+O objetivo deste trabalho foi predizer como seria a pandemia da COVID-19 na Itália se não fossem tomadas as medidas de contenção de propagação e, após isso,  foi feita uma previsão de como será após a tomada das medidas como lockdown e uso de máscara. A predição foi realizada com o modelo epidemiológico SIR.
 
-Foi analisado apenas o período inicial da pandemia, pois há diversos fatores que o modelo SEIR, pelo menos em sua versão mais simplista, não consegue captar, por exemplo, o desenvolvimento e aplicação de vacinas, migração de pessoas e reinfecção.
+Foi analisado apenas o período inicial da pandemia, pois há diversos fatores que o modelo SIR, pelo menos em sua versão mais simplista, não consegue captar, por exemplo, o desenvolvimento e aplicação de vacinas, migração de pessoas e reinfecção.
 
 
 ## Metodologia
 
-A pandemia de COVID-19 fez com que centros de pesquisa e organizações voltassem a atenção para modelos epidemiológicos, entre eles o SEIR. A capacidade dos modelos em fazer previsões sobre o futuro da disseminação de vírus permite aos cientistas avaliar planos de vacinação e de isolamento que no futuro podem ser implementados através de políticas governamentais.
+A pandemia de COVID-19 fez com que centros de pesquisa e organizações voltassem a atenção para modelos epidemiológicos, entre eles o SIR. A capacidade dos modelos em fazer previsões sobre o futuro da disseminação de vírus permite aos cientistas avaliar planos de vacinação e de isolamento que no futuro podem ser implementados através de políticas governamentais.
 
-### Modelo SEIR
+### Modelo SIR
 
-Neste trabalho, foi aplicado o modelo SEIR para fazer a previsão da progressão da COVID-19 na Itália.  Esse modelo é dado por 4 componentes/estados: Suscetível, Exposto, Infeccioso e Removido (SEIR), e pode ser visto na Figura 1 junto com as taxas de transição entre os estados.
+Neste trabalho, foi aplicado o modelo SIR para fazer a previsão da progressão da COVID-19 na Itália.  Esse modelo é dado por 3 componentes/estados: Suscetível, Infeccioso e Removido (SIR), e pode ser visto na Figura 1 junto com as taxas de transição entre os estados.
 
-O modelo utilizado nesse trabalho se baseou no modelo do artigo das pesquisadoras Aidalina Mahmud e Poh Ying Lim: \textit{Applying the SEIR Model in Forecasting The COVID-19 Trend in Malaysia: A Preliminary Study} [13]. A análise seguiu os mesmos passos do artigo, a diferença está nos dados utlizados. As pesquisadoras usaram os dados da Malásia e esse projeto, os dados da Itália.
+Esse projeto se baseou no trabalho do artigo das pesquisadoras Aidalina Mahmud e Poh Ying Lim: \textit{Applying the SEIR Model in Forecasting The COVID-19 Trend in Malaysia: A Preliminary Study} [13]. A análise seguiu os mesmos passos do artigo, a diferença está nos dados e modelo utlizados. As pesquisadoras usaram os dados da Malásia e o modelo SEIR e esse projeto, os dados da Itália e o modelo SIR.
 
-```{r, fig.cap="Estados do modelo SEIR: Suscetível (S), Exposto (E), Infeccioso (I) e Removido (R).",out.width = "99%"}
+```{r, fig.cap="Estados do modelo SIR: Suscetível (S), Infeccioso (I) e Removido (R).",out.width = "99%"}
 library(knitr)
 
-img_path <- "SEIR_diagrama.png"
+img_path <- "SIR_diagrama.png"
 include_graphics(img_path)
 ```
 
 
-Suscetível, Exposto, Infeccioso e Removido são estados pelos quais um indivíduo progride na sequência. A taxa de infecção, $\beta$, controla a taxa de disseminação que representa a probabilidade de transmitir a doença entre suscetível e um indivíduo infectado. A taxa de incubação, $\delta$, é a taxa de indivíduos expostos a se tornarem infectados (Tempo médio de incubação é dado por $1/\delta$). A taxa de remoção, $\gamma = 1/D$, é determinada pelo tempo de duração médio, D, da infecção. 
+Suscetível, Infeccioso e Removido são estados pelos quais um indivíduo progride na sequência. A taxa de infecção, $\beta$, controla a taxa de disseminação que representa a probabilidade de transmitir a doença entre suscetível e um indivíduo infectado. A taxa de remoção, $\gamma = 1/D$, é determinada pelo tempo de duração médio, D, da infecção. 
 
-A quantidade S denota o número de indivíduos que estão suscetíveis à doença, mas não infectados. Ou seja, todas as pessoas da população que estão em risco. A quantidade E denota o número de indivíduos que foram expostos ou infectados, porém não infecciosos. A quantidade I denota o número de indivíduos que podem transmitir a doença através do contato com indivíduos suscetíveis. E a quantidade R denota o número de indivíduos que conseguiram sobreviver e adquiriram imunidade para a doença ou morreram. As equações que governam a evolução e a dinâmica do modelo SEIR podem ser descritas pelas seguintes equações diferenciais ordinárias (1).
+A quantidade S denota o número de indivíduos que estão suscetíveis à doença, mas não infectados. Ou seja, todas as pessoas da população que estão em risco. A quantidade I denota o número de indivíduos que podem transmitir a doença através do contato com indivíduos suscetíveis. E a quantidade R denota o número de indivíduos que conseguiram sobreviver e adquiriram imunidade para a doença ou morreram. As equações que governam a evolução e a dinâmica do modelo SIR podem ser descritas pelas seguintes equações diferenciais ordinárias (1).
 
 $$ \frac{dS}{dt} = \frac{-\beta S I}{N}$$
-
-$$ \frac{dE}{dt} = \frac{-\beta S I}{N} - \delta E \tag{1}$$
-
-$$\frac{dI}{dt} = \delta E - \gamma I$$
+$$\frac{dI}{dt} = \frac{\beta S I}{N} - \gamma I$$
 
 $$\frac{dR}{dt} = \gamma I$$
-
-Estudos mais aprofundados mostraram que o período de incubação para o Sars-Cov-2 varia de 2 até 14 dias e os sintomas começam entre 4 e 5 dias após a exposição. Uma característica do novo coronavírus é que um indivíduo exposto pode ser contagioso 48 horas antes de sentir os sintomas [2].
 
 ## Dados
 

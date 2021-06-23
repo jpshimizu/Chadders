@@ -110,6 +110,30 @@ $$\frac{dI}{dt} = \frac{\beta S I}{N} - \gamma I$$
 
 $$\frac{dR}{dt} = \gamma I$$
 
+Foi utilizado como estimativa para o parâmetro $\gamma$ o valor $1/20$, pois estudos já mostraram que o tempo médio que o paciente fica infectado está entre 14 a 25 dias[2]. O parâmetro $\beta$ foi estimado através de uma regressão linear do tipo:
+
+$$log(Casos_{dia_i}) = \alpha_0 + \alpha_1*\mbox{tempo}_i + e_i, \tag{2}$$
+
+onde $e_i \sim N(0,\sigma^2)$. 
+
+Para predizer como seria a pandemia se não fossem adotadas medidas anti-contágio, o parâmetro $\beta$ do modelo SIR foi dado pelo coeficiente angular $\alpha_1$ do modelo (2) entre os dias 8 a 15 de março de 2020 (uma semana após medidas anti-contágio). E para predizer como seria pandemia após as medidas anti-contágio, o parâmetro $\beta$ foi dado pelo coeficiente angular $\alpha_1$ do modelo (2) entre os dias 16 a 25 (duas semanas após a implementação das medidas anti-contágio).
+
+Os parâmetros utilizados nos modelos podem ser encontrados na Tabela 1.
+
+```{r}
+parametros = data.frame("Periodo" = c("Antes_das_medidas_restritivas",
+                                      "Depois_das_medidas_restritivas"),
+           "Beta" = c(0.141, 0.106),
+           "Gamma" = c(0.05, 0.05))
+
+#kable(parametros,
+#      caption = "Tabela com os parâmetros dos modelos utilizados.")
+
+parametros
+```
+
+
+
 ## Dados
 
 O conjunto de dados utilizado é proveniente de um repositório na plataforma Github e é mantido e atualizado pelo time de Ciência e Engenharia da Universidade John Hopkins, EUA [14]. 
@@ -128,38 +152,13 @@ Como trabalhamos apenas com os dados da Itália, ocorreu uma filtragem para que 
 #Pacotes
 library(tidyverse)
 library(deSolve)
+library(patchwork)
 ```
 
 
-```{r SEIR function}
-#Função SEIR
-seir_model = function (current_timepoint, state_values, parameters)
-{
-  # criando variáveis locais
-  S = state_values [1]        # suscetiveis
-  E = state_values [2]        # exposto
-  I = state_values [3]        # infeccioso
-  R = state_values [4]        # recuperado
-  
-  with ( 
-    as.list (parameters),     # nomes de variáveis dentro dos parenteses podem ser usadas 
-         {
-           # computando derivadas
-           dS = (-beta * S * I)
-           dE = (beta * S * I) - (delta * E)
-           dI = (delta * E) - (gamma * I)
-           dR = (gamma * I)
-           
-           # combinando resultados
-           results = c (dS, dE, dI, dR)
-           list (results)
-         }
-    )
-}
-```
+## Aplicação
 
-
-### Aplicação
+A Figura 2 mostra os casos e mortes pela COVID-19 entre os dias 21 de fevereiro (primeiro caso registrado na Itália) e 27 de fevereiro de 2020 (uma semana após os 14 dias de medidas restritivas).
 
 ```{r Carregando dados}
 #Carregando os dados
@@ -172,82 +171,147 @@ PopItaly = 60565372
 ```
 
 
-```{r}
-#Parametros
-contact_rate = italia$Confirmed[nrow(italia)]/nrow(italia)	             
-# número de contatos por dia
-transmission_probability = italia$Confirmed[nrow(italia)]/PopItaly       
-# probabilidade de transmissão
-infectious_period = 12                                                     
-# período infeccioso do COVID-19, achado no Google
-latent_period = 5                                                          
-# período latente do COVID-19, achado no Google
+
+```{r, fig.cap="Casos e mortes pela COVID-19 na Itália entre fevereiro e março de 2020. A cor azul representa os mortes e a vermelha, os casos."}
+#variável casos diários
+italia = italia %>% mutate(Caso_Diario = dplyr::lead(Confirmed, n = 1, default = NA) - Confirmed)
+
+#variável mortes diárias
+italia = italia %>% mutate(Morte_Diario = dplyr::lead(Deaths, n = 1, default = NA) - Deaths)
+
+italia %>%
+  filter(Date <= '2020-03-27', Date >= '2020-02-21') %>%
+  gather(key,value, Caso_Diario, Morte_Diario) %>%
+  ggplot(aes(y = value, x = Date, colour = key)) +
+  geom_line()+
+  annotate("text",x = as.Date("2020-03-06"), y = 5000, label = "Implementação medidas\nanti-contágio", col = "black", size = 4,angle = 90) +
+  #annotate("text",x = as.Date("2020-03-15"), y = 1860, label = "14 dias", col = "black", size = 4) +
+  #geom_segment(aes(x=as.Date("2020-03-08"),xend=as.Date("2020-03-22"),y=2000,yend=2000, col = "#FFFFFF")) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-03-08")), linetype=4) +
+  #geom_vline(xintercept = as.numeric(as.Date("2020-03-22")), linetype=4) + 
+  theme_bw() +
+  xlab("Data") +
+  ylab("Contagem") + 
+  theme(legend.position = "none")
 ```
 
 
 ```{r}
-#Taxas de Trasmissão
-beta_value = contact_rate * transmission_probability
-gamma_value = 1 / infectious_period
-delta_value = 1 / latent_period
+italia_antes = italia %>%
+  filter(Date >= '2020-03-09',Date <= '2020-03-16')
 
-#Reproductive number (Número reprodutivo)
-Ro = beta_value / gamma_value #7000
+nrow_antes = nrow(italia_antes)
 
-#Parametros da doença
-parameter_list = c (beta = beta_value, gamma = gamma_value, delta = delta_value)
+reg_antes = lm(log(Caso_Diario) ~ seq(1,nrow_antes), data = italia_antes)
+#summary(reg_antes)
+beta_antes = as.numeric(coef(reg_antes)[2]);#beta_antes
 ```
 
 
 ```{r}
-#Valores inventados da população
-W = 10000                                              
-# hospedeiros suscetíveis
-X = 691                                                
-# hospedeiros infecciosos
-Y = 622                                                
-# hospedeiros recuperados
-Z = 7000           
-# hospedeiros expostos
+italia_depois = italia %>%
+  filter(Date >= '2020-03-16',Date <= '2020-03-21')
 
-#Computando população total
-N = W + X + Y + Z
-#estado inicial
-initial_values = c (S = W/N, E = X/N, I = Y/N, R = Z/N)
-#Pontos de tempo de saída
-timepoints = seq (0, 50, by=1)
+nrow_depois = nrow(italia_depois)
+
+reg_depois = lm(log(Caso_Diario) ~ seq(1,nrow_depois), data = italia_depois)
+#summary(reg_depois)
+beta_depois = as.numeric(coef(reg_depois)[2]);#beta_depois
 ```
 
 
 ```{r}
-#Aplicando o modelo SEIR
-output = lsoda (initial_values, timepoints, seir_model, parameter_list)
+#function SIR
+SIR = function(S0, I0, R0, t0, t1, beta, gamma){
+  N = S0+I0+R0
+  S = S0; R = R0; I = I0
+  SS = c(S0); RR = c(R0); II = c(I0)
+  dt = 1
+  t = t0
+  tt = t0
+  while(t <= t1){
+    dS = -(beta/N)*S*I
+    dI = (beta/N)*S*I - gamma*I
+    dR = gamma*I
+    S = S+dt*dS
+    I = I+dt*dI
+    R = R+dt*dR
+    SS = c(SS,S);II = c(II,I);RR = c(RR,R)
+    t = t+dt
+    tt = c(tt,t)
+  }
+  return(list("SS"=SS,
+              "II"=II,
+              "RR"=RR,
+              "tt"=tt))
+}
 ```
 
 
 ```{r}
-#Gráfico tudo junto
-# hospedeiros suscetíveis ao longo do tempo
-plot (S ~ time, data = output, type='b', ylim = c(0,1), col = 'blue', ylab = 'S, E, I, R', main = 'SEIR epidemic') 
+modelo_SIR_antes = SIR(60.36*10^6,
+                 2000,
+               0,
+               0, 200,
+               beta_antes,1/25)
 
-# permanecer no mesmo quadro
-par (new = TRUE)    
+sir_antes = data.frame("Suscetivel" = modelo_SIR_antes$SS,
+                        "Infeccioso" = modelo_SIR_antes$II,
+                        "Recuperado" = modelo_SIR_antes$RR,
+                        "Tempo" = seq(1, 202))
 
-# hospedeiros expostos ao longo do tempo
-plot (E ~ time, data = output, type='b', ylim = c(0,1), col = 'pink', ylab = '', axes = FALSE)
-
-# permanecer no mesmo quadro
-par (new = TRUE) 
-
-# hospedeiros infecciosos ao longo do tempo
-plot (I ~ time, data = output, type='b', ylim = c(0,1), col = 'red', ylab = '', axes = FALSE) 
-
-# permanecer no mesmo quadro
-par (new = TRUE)  
-
-# hospedeiros recuperados ao longo do tempo
-plot (R ~ time, data = output, type='b', ylim = c(0,1), col = 'green', ylab = '', axes = FALSE)
+plot_antes = sir_antes %>%
+  gather(key,value, Suscetivel, Infeccioso, Recuperado) %>%
+  ggplot(aes(x = Tempo, y = value, colour = key))+
+  geom_line()+
+  theme_bw() +
+  xlab(" ") +
+  annotate("text",x = 25, y = 4e7, label = "Antes das medidas anti-contágio", col = "black", size = 3)+
+  ylab("Contagem") + 
+  theme(legend.position = "none")
 ```
+
+
+```{r}
+modelo_SIR_depois = SIR(60.36*10^6,
+                 19000,
+               0,
+               0, 200,
+               beta_depois,1/25)
+
+#modelo_SIR_depois
+
+sir_depois = data.frame("Suscetivel" = modelo_SIR_depois$SS,
+                        "Infeccioso" = modelo_SIR_depois$II,
+                        "Recuperado" = modelo_SIR_depois$RR,
+                        "Tempo" = seq(1, 202))
+
+plot_depois = sir_depois %>%
+  gather(key,value, Suscetivel, Infeccioso, Recuperado) %>%
+  ggplot(aes(x = Tempo, y = value, colour = key))+
+  geom_line()+
+  theme_bw() +
+  xlab("Dias a partir de 1 de abril de 2020") +
+  annotate("text",x = 25, y = 4e7, label = "Depois das medidas anti-contágio", col = "black", size = 3)+
+  ylab("Contagem") + 
+  theme(legend.position = "none")
+```
+
+Podemos ver na Figura 3 os cenários previstos para a Itália caso a pandemia fosse controlada ou não. Se medidas anti-contágio não fossem adotadas, haveria um pico no número de infecciosos dentro de 120 dias depois de primeiro de abril de 2020. E 200 dias depois depois de abril, a maioria da população já teria se infectado.
+
+Ainda na Figura 3, podemos ver o cenário previsto depois das medidas anti-contágio. O pico do número infecciosos será atingido entre 140 dias depois de primeiro de abril e será menor comparado com o pico do cenário sem medidas restritivas.
+
+```{r, fig.height= 5, fig.cap = "Previsão do número de suscetíveis (azul), de infecciosos (vermelha) e de recuperados (verde) antes e depois das medidas anti-contágio pelo modelo SIR na Itália."}
+plot_antes / plot_depois
+```
+
+\newpage
+
+## Conclusão
+
+O Corona vírus se espalhou rapidamente pelo planeta e surpreendeu todos os países. Como a produção de testes no começo da pandemia era bem limitada, o número de infecções na Itália pode ser bem maior que o registrado, como já dito em [9]. Se os números reais forem muito discrepantes aos valores registrados, a previsão feita nesse trabalho pode estar subestimando o tempo para que o pico de infecciosos ocorra. 
+
+Caso os números reais não sejam muito discrepantes com os números registrados, após a implementação das medidas restritivas de 8 de março de 2020, é previsto que a epidemia na Itália atingirá seu pico aproximadamente 4 meses depois de primeiro de abril e terá uma queda no número de infecções logo após esse período. Restringir o movimento da população irá reduzir o contato entre indivíduos e, por esse motivo, diminuirá o número de transmissões e taxas de infecção. Isso achatará a curva epidemiológica, mas também irá prolongar a duração da pandemia. A decisão de estender as medidas anti-contágio deve considerar fatores socioeconômicos também.
 
 \newpage
 

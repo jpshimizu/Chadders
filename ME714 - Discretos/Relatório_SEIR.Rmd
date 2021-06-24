@@ -68,7 +68,7 @@ Em 8 de março de 2020, o Primeiro Ministro Italiano Giuseppe Conte implementou 
 
 Em 11 de março,  devido ao grande número de casos e da rápida propagação do vírus em todos os continentes, a Organização Mundial da Saúde (OMS) declarou pandemia do Coronavírus [6]. 
 
-Em 21 de março na Itália, todos os serviços não essenciais,  indústrias e escolas foram fechados e a movimentação de pessoas foi restringida [7]. Apenas serviços essenciais puderam permanecer abertos, como farmácias, supermercados e áreas relacionadas à saúde (hospitais e indústrias produtoras de oxigênio e respiradores).
+Em 21 de março na Itália, todos os serviços não essenciais,  indústrias e escolas foram fechados e a movimentação de pessoas foi restringida [7]. Apenas serviços essenciais puderam permanecer abertos, como farmácias, supermercados e áreas relacionadas à saúde (hospitais e indústrias produtoras de oxigênio e respiradores). O que restringiu a movimentação dos 60 milhões de habitantes do país.
 
 Durante esse período atípico de propagação do Coronavírus, o governo italiano implementou medidas individuais de proteção, como obrigatoriedade do uso de máscara em transportes e lugares públicos e quarentena de 14 dias para quem testou positivo para a doença [8].
 
@@ -89,9 +89,9 @@ A pandemia de COVID-19 fez com que centros de pesquisa e organizações voltasse
 
 ### Modelo SIR
 
-Neste trabalho, foi aplicado o modelo SIR para fazer a previsão da progressão da COVID-19 na Itália.  Esse modelo é dado por 3 componentes/estados: Suscetível, Infeccioso e Removido (SIR), e pode ser visto na Figura 1 junto com as taxas de transição entre os estados.
+Neste trabalho, foi aplicado o modelo SIR para fazer a previsão da progressão da COVID-19 na Itália.  Esse modelo é dado por 3 componentes/estados: Suscetível, Infeccioso e Removido (SIR), e pode ser visto na Figura 1 junto com as taxas de transição entre os estados. Para mais informações sobre o modelo SIR utilizado nesse trabalho, veja [13].
 
-Esse projeto se baseou no trabalho do artigo das pesquisadoras Aidalina Mahmud e Poh Ying Lim: \textit{Applying the SEIR Model in Forecasting The COVID-19 Trend in Malaysia: A Preliminary Study} [13]. A análise seguiu os mesmos passos do artigo, a diferença está nos dados e modelo utlizados. As pesquisadoras usaram os dados da Malásia e o modelo SEIR e esse projeto, os dados da Itália e o modelo SIR.
+Esse projeto se baseou no trabalho do artigo das pesquisadoras Aidalina Mahmud e Poh Ying Lim: \textit{Applying the SEIR Model in Forecasting The COVID-19 Trend in Malaysia: A Preliminary Study} [14]. A análise seguiu os mesmos passos do artigo, a diferença está nos dados e modelo utlizados. As pesquisadoras usaram os dados da Malásia e o modelo SEIR e esse projeto, os dados da Itália e o modelo SIR.
 
 ```{r, fig.cap="Estados do modelo SIR: Suscetível (S), Infeccioso (I) e Removido (R).",out.width = "99%"}
 library(knitr)
@@ -106,17 +106,19 @@ Suscetível, Infeccioso e Removido são estados pelos quais um indivíduo progri
 A quantidade S denota o número de indivíduos que estão suscetíveis à doença, mas não infectados. Ou seja, todas as pessoas da população que estão em risco. A quantidade I denota o número de indivíduos que podem transmitir a doença através do contato com indivíduos suscetíveis. E a quantidade R denota o número de indivíduos que conseguiram sobreviver e adquiriram imunidade para a doença ou morreram. As equações que governam a evolução e a dinâmica do modelo SIR podem ser descritas pelas seguintes equações diferenciais ordinárias (1).
 
 $$ \frac{dS}{dt} = \frac{-\beta S I}{N}$$
-$$\frac{dI}{dt} = \frac{\beta S I}{N} - \gamma I$$
+$$\frac{dI}{dt} = \frac{\beta S I}{N} - \gamma I \tag{1}$$
 
 $$\frac{dR}{dt} = \gamma I$$
 
-Foi utilizado como estimativa para o parâmetro $\gamma$ o valor $1/20$, pois estudos já mostraram que o tempo médio que o paciente fica infectado está entre 14 a 25 dias[2]. O parâmetro $\beta$ foi estimado através de uma regressão linear do tipo:
+Foi utilizado como estimativa para o parâmetro $\gamma$ o valor $1/20$, pois estudos já mostraram que o tempo médio que o paciente fica infectado está entre 14 a 25 dias [2]. O parâmetro $\beta$ foi estimado através de uma regressão linear do tipo:
 
 $$log(Casos_{dia_i}) = \alpha_0 + \alpha_1*\mbox{tempo}_i + e_i, \tag{2}$$
 
-onde $e_i \sim N(0,\sigma^2)$. 
+onde $e_i \sim N(0,\sigma^2)$ e $tempo_i = i$, $i = 1,2, 3,..., 7$. 
 
 Para predizer como seria a pandemia se não fossem adotadas medidas anti-contágio, o parâmetro $\beta$ do modelo SIR foi dado pelo coeficiente angular $\alpha_1$ do modelo (2) entre os dias 8 a 15 de março de 2020 (uma semana após medidas anti-contágio). E para predizer como seria pandemia após as medidas anti-contágio, o parâmetro $\beta$ foi dado pelo coeficiente angular $\alpha_1$ do modelo (2) entre os dias 16 a 25 (duas semanas após a implementação das medidas anti-contágio).
+
+Foi escolhido esses períodos para o cálculo dos dois $\beta$, pois não ocorreria uma alteração no registro de casos em uma semana após a implementação das medidas restritivas devido ao fato de que demora cerca de 5 a 7 dias para uma pessoa infectada demonstrar sintomas [2]. Com isso a tendência de crescimento do número de casos ainda segue os padrões do período sem medidas restritivas. Após uma semana de medidas restritivas, as pessoas que demonstrarassem sintomas da COVID-19 se infectaram depois da implementação das medidas anti-contágio. Dessa forma, ao usar esses dois períodos para o cálculo dos parâmetros, obtemos a tendência de crescimentos antes e depois das ações públicas para conter a disseminação.
 
 Os parâmetros utilizados nos modelos podem ser encontrados na Tabela 1.
 
@@ -136,7 +138,7 @@ parametros
 
 ## Dados
 
-O conjunto de dados utilizado é proveniente de um repositório na plataforma Github e é mantido e atualizado pelo time de Ciência e Engenharia da Universidade John Hopkins, EUA [14]. 
+O conjunto de dados utilizado é proveniente de um repositório na plataforma Github e é mantido e atualizado pelo time de Ciência e Engenharia da Universidade John Hopkins, EUA [15]. 
 
 O banco de dados inclui séries temporais de rastreio do número de pessoas afetadas pela COVID-19 no mundo, incluindo:
 
@@ -158,7 +160,7 @@ library(patchwork)
 
 ## Aplicação
 
-A Figura 2 mostra os casos e mortes pela COVID-19 entre os dias 21 de fevereiro (primeiro caso registrado na Itália) e 27 de fevereiro de 2020 (uma semana após os 14 dias de medidas restritivas).
+A Figura 2 mostra os casos e mortes diários pela COVID-19 entre os dias 21 de fevereiro (primeiro caso registrado na Itália) e 27 de março de 2020 (uma semana após os 14 dias de medidas restritivas).
 
 ```{r Carregando dados}
 #Carregando os dados
@@ -172,7 +174,7 @@ PopItaly = 60565372
 
 
 
-```{r, fig.cap="Casos e mortes pela COVID-19 na Itália entre fevereiro e março de 2020. A cor azul representa os mortes e a vermelha, os casos."}
+```{r, fig.cap="Casos e mortes diários pela COVID-19 na Itália entre fevereiro e março de 2020. A cor azul representa os mortes e a vermelha, os casos."}
 #variável casos diários
 italia = italia %>% mutate(Caso_Diario = dplyr::lead(Confirmed, n = 1, default = NA) - Confirmed)
 
@@ -299,7 +301,7 @@ plot_depois = sir_depois %>%
 
 Podemos ver na Figura 3 os cenários previstos para a Itália caso a pandemia fosse controlada ou não. Se medidas anti-contágio não fossem adotadas, haveria um pico no número de infecciosos dentro de 120 dias depois de primeiro de abril de 2020. E 200 dias depois depois de abril, a maioria da população já teria se infectado.
 
-Ainda na Figura 3, podemos ver o cenário previsto depois das medidas anti-contágio. O pico do número infecciosos será atingido entre 140 dias depois de primeiro de abril e será menor comparado com o pico do cenário sem medidas restritivas.
+Ainda na Figura 3, podemos ver o cenário previsto depois das medidas anti-contágio. O pico do número infecciosos será atingido entre 140 dias depois de primeiro de abril e será menor comparado com o pico do cenário sem medidas restritivas. Dessa forma, haverá uma diminuição na exigência de leitos do sistema de saúde. 
 
 ```{r, fig.height= 5, fig.cap = "Previsão do número de suscetíveis (azul), de infecciosos (vermelha) e de recuperados (verde) antes e depois das medidas anti-contágio pelo modelo SIR na Itália."}
 plot_antes / plot_depois
@@ -310,6 +312,8 @@ plot_antes / plot_depois
 ## Conclusão
 
 O Corona vírus se espalhou rapidamente pelo planeta e surpreendeu todos os países. Como a produção de testes no começo da pandemia era bem limitada, o número de infecções na Itália pode ser bem maior que o registrado, como já dito em [9]. Se os números reais forem muito discrepantes aos valores registrados, a previsão feita nesse trabalho pode estar subestimando o tempo para que o pico de infecciosos ocorra. 
+
+Além disso, o modelo SIR não leva em conta acontecimentos e políticas públicas que podem vir a ser tomadas no futuro. Com isso, se ações forem tomadas para flexibilizar a circulação de pessoas ou para desacelerar ainda mais a transmissão, elas podem alterar o futuro e com isso os modelos utilizados nesse trabalho ficarão obsoletos.
 
 Caso os números reais não sejam muito discrepantes com os números registrados, após a implementação das medidas restritivas de 8 de março de 2020, é previsto que a epidemia na Itália atingirá seu pico aproximadamente 4 meses depois de primeiro de abril e terá uma queda no número de infecções logo após esse período. Restringir o movimento da população irá reduzir o contato entre indivíduos e, por esse motivo, diminuirá o número de transmissões e taxas de infecção. Isso achatará a curva epidemiológica, mas também irá prolongar a duração da pandemia. A decisão de estender as medidas anti-contágio deve considerar fatores socioeconômicos também.
 
@@ -341,10 +345,11 @@ Caso os números reais não sejam muito discrepantes com os números registrados
   
   -[12] How deadly is the coronavirus? Scientists are close to an answer. Nature, 16 de junho de 2020. Disponível em: \url{https://www.nature.com/articles/d41586-020-01738-2}. Acesso em: 4 de junho de 2021. 
   
-  -[13] Aidalina Mahmud e Poh Ying Lim. Applying the SEIR Model in Forecasting The COVID-19 Trend in Malaysia: A Preliminary Study
-. MedRxiv, 17 de abril de 2020. Disponível em: \url{https://www.medrxiv.org/content/10.1101/2020.04.14.20065607v1.article-info}. 
+  -[13] Ian Cooper, Argha Mondal e Chris G. Antonopoulosb. A SIR model assumption for the spread of COVID-19 in different communities. NCBI, 28 de junho de 2020. Disponível em: \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7321055/}. 
+
+  -[14] Aidalina Mahmud e Poh Ying Lim. Applying the SEIR Model in Forecasting The COVID-19 Trend in Malaysia: A Preliminary Study. MedRxiv, 17 de abril de 2020. Disponível em: \url{https://www.medrxiv.org/content/10.1101/2020.04.14.20065607v1.article-info}.  
   
-  -[14] COVID-19 dataset. Johns Hopkins University Center for Systems Science and Engineering (CSSE), 4 de junho de 2021. Disponível em: \url{https://github.com/datasets/covid-19}. Acesso em: 4 de junho de 2021. 
+  -[15] COVID-19 dataset. Johns Hopkins University Center for Systems Science and Engineering (CSSE), 4 de junho de 2021. Disponível em: \url{https://github.com/datasets/covid-19}. Acesso em: 4 de junho de 2021. 
   
 
   

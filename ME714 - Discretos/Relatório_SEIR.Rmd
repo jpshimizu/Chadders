@@ -128,10 +128,10 @@ parametros = data.frame("Periodo" = c("Antes_das_medidas_restritivas",
            "Beta" = c(0.141, 0.106),
            "Gamma" = c(0.05, 0.05))
 
-#kable(parametros,
-#      caption = "Tabela com os parâmetros dos modelos utilizados.")
+kable(parametros,
+      caption = "Tabela com os parâmetros dos modelos utilizados.")
 
-parametros
+#parametros
 ```
 
 
